@@ -27,8 +27,7 @@ const users = [{
   postCount: 86,
   followersCount: 22102,
   followingCount: 536,
-  images,
-
+  images, 
 },
 {
   id: 2,

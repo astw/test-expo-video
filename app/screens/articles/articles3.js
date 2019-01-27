@@ -30,10 +30,17 @@ export class Articles3 extends React.Component {
 //   const response = await fetch(url);
 //   const json = await response.json(); 
 //   this.setState({ data: json });
- 
-    let person = await data.getUser(); 
-    this.setState({data: person}); 
+  
+    let pp = await data.getRandomUser(3);
+    pp = pp.map((i, index) =>{
+       let ic = i; 
+       ic.id = index;
+       ic.photo = i.picture.large; 
+       return ic;
+    })  
+    this.setState({data: pp})
   }
+
   static propTypes = {
     navigation: NavigationType.isRequired,
   };
@@ -42,7 +49,7 @@ export class Articles3 extends React.Component {
   };
 
   // state = {
-  //   data: await data.getUser(),
+  //   data: data.getArticles(),
   // };
 
   extractItemKey = (item) => `${item.id}`;

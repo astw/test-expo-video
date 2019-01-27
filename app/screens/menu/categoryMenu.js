@@ -23,6 +23,8 @@ export class CategoryMenu extends React.Component {
 
   onItemPressed = (item) => {
     const url = item.action || item.id;
+    console.log('------- item', item);
+    this.props.title = item.title;
     this.props.navigation.navigate(url);
   };
 

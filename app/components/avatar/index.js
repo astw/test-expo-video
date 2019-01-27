@@ -36,12 +36,15 @@ export class Avatar extends RkComponent {
       default: return {};
     }
   };
-
+ 
   renderImg = (styles) => (
+    
     <View>
-      <Image style={styles.image} source={this.props.img} />
+      {/* <Image style={styles.image} source={this.props.img} /> */}
+      <Image style={styles.image} source = {{uri:this.props.img}} />
       { this.props.badge && this.renderBadge(styles.badge)}
     </View>
+
   );
 
   renderBadge = (style, textStyle) => {

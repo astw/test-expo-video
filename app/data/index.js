@@ -7,14 +7,37 @@ import conversations from './raw/conversations';
 import cards from './raw/cards';
 import axisos from 'axios';
 
-let url = 'https://jsonplaceholder.typicode.com/users';
-
 class DataProvider {
-  async getUser(id = 1) { 
-    let res = await axisos.get(url);   
+
+  async getMyChildProfile(id =1){ 
+    let users = await this.getRandomUser(2);    
+    let user = users[0];  
+    user.name = "王涬之"
+    user.photo = user.picture.large;  
+    user.className = '五五班';
+    user.principleTeacher = "张曼";
+    user.principleTeacherEmail = "wangman@163.com";
+
+    return user;
+  }
+
+  async getOneUser(id = 1) {
+    
+    let url = 'https://jsonplaceholder.typicode.com/users';
+    let res = await axisos.get(url);  
     return res.data;
    //  return await res.json();
    // return _.find(users, x => x.id === id);
+  }
+  
+  async getRandomUser(count = 10){
+    let testUsers = `https://randomuser.me/api/?results=${count}`;
+    let res = await axisos.get(testUsers);   
+    return res.data.results;
+  }
+
+  getUser(id = 1) {
+    return _.find(users, x => x.id === id);
   }
 
   getUsers() {

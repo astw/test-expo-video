@@ -19,7 +19,7 @@ export class MyChildProfile extends React.Component {
     navigation: NavigationType.isRequired,
   };
   static navigationOptions = {
-    title: '王涬之 （五五班）'.toUpperCase(),
+    title: ''
   };
 
   state = {
@@ -28,15 +28,22 @@ export class MyChildProfile extends React.Component {
 
   constructor(props) {
     super(props);
-    const id = this.props.navigation.getParam('id', 1);
-    this.state.data = data.getUser(id);
+    const id = this.props.navigation.getParam('id', 1); 
+    // this.state.data = data.getUser(id);
+    this.state = {data:{name:"", className:""}};
   }
+   
+  async componentWillMount(){
+      let user = await data.getMyChildProfile(); 
+      // MyChildProfile.navigationOptions.title = user.className;
+      this.setState({data: user})
+  } 
 
   render = () => (
     <ScrollView style={styles.root}>
-      <View style={[styles.header, styles.bordered]}>
+      <View style={[styles.header, styles.bordered]}> 
         <Avatar img={this.state.data.photo} rkType='big' />
-        {/* <RkText rkType='header2'>{`${this.state.data.firstName} ${this.state.data.lastName}`}</RkText> */}
+        <RkText rkType='header3'>{`${this.state.data.name} ${this.state.data.className} `}</RkText>
       </View>
       <View style={[styles.userInfo, styles.bordered]}>
         {/* <View style={styles.section}>
@@ -44,8 +51,8 @@ export class MyChildProfile extends React.Component {
           <RkText rkType='secondary1 hintColor'>Posts</RkText>
         </View> */}
         <View style={styles.section}>
-          <RkText rkType='header3' style={styles.space}>班主任：王曼</RkText>
-          <RkText rkType='secondary1 hintColor'>给老师发邮件</RkText>
+          <RkText rkType='header5' style={styles.space}>班主任：{this.state.data.principleTeacher} </RkText>
+          <RkText rkType='secondary1 hintColor'>给老师发邮件 {this.state.data.principleTeacherEmail} </RkText>
         </View>
         {/* <View style={styles.section}>
           <RkText rkType='header3' style={styles.space}>{this.state.data.followingCount}</RkText>
