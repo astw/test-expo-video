@@ -13,6 +13,7 @@ import { data } from '../../data/';
 import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
 import {Articles3} from '../articles';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 
 export class MyChildProfile extends React.Component {
   static propTypes = {
@@ -30,26 +31,82 @@ export class MyChildProfile extends React.Component {
     super(props);
     const id = this.props.navigation.getParam('id', 1); 
     // this.state.data = data.getUser(id);
-    this.state = {data:{name:"", className:""}};
+    this.state = {
+      data:{name:"", className:""},
+      myText: 'I\'m ready to get swiped!',
+      gestureName: 'none',
+      backgroundColor: '#fff'
+    };
   }
    
   async componentWillMount(){
       let user = await data.getMyChildProfile(); 
       // MyChildProfile.navigationOptions.title = user.className;
       this.setState({data: user})
-  } 
+  }  
 
-  render = () => (
+  onSwipeDown(gestureState) {
+    this.setState({myText: 'You swiped down!'});
+  }
+
+  async onSwipeLeft(gestureState) {
+    let user = await data.getMyChildProfile(); 
+    // MyChildProfile.navigationOptions.title = user.className;
+    this.setState({data: user})
+
+    console.log('You swiped left!');
+  }
+
+  async onSwipeRight(gestureState) {
+    let user = await data.getMyChildProfile(); 
+    // MyChildProfile.navigationOptions.title = user.className;
+    this.setState({data: user})
+
+    console.log('You swiped right!');
+  }
+
+  onSwipe(gestureName, gestureState) {
+    const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+    this.setState({gestureName: gestureName});
+    switch (gestureName) {
+      case SWIPE_DOWN:
+        this.setState({backgroundColor: 'green'});
+        break;
+      case SWIPE_LEFT:
+        this.setState({backgroundColor: 'blue'});
+        break;
+      case SWIPE_RIGHT:
+        this.setState({backgroundColor: 'yellow'});
+        break;
+    }
+  }
+ 
+  render = () => {
+    const config = {
+      velocityThreshold: 0.3,
+      directionalOffsetThreshold: 80
+    };
+    
+    return (
     <ScrollView style={styles.root}>
-      <View style={[styles.header, styles.bordered]}> 
-        <Avatar img={this.state.data.photo} rkType='big' />
-        <RkText rkType='header3'>{`${this.state.data.name} ${this.state.data.className} `}</RkText>
-      </View>
+    <GestureRecognizer
+        onSwipe={(direction, state) => this.onSwipe(direction, state)} 
+        onSwipeDown={(state) => this.onSwipeDown(state)}
+        onSwipeLeft={(state) => this.onSwipeLeft(state)}
+        onSwipeRight={(state) => this.onSwipeRight(state)}
+        config={config}
+        // style={{ 
+        //   backgroundColor: this.state.backgroundColor
+        // }}
+        >
+        <View style={[styles.header, styles.bordered]}> 
+          <RkButton style={styles.floatButtonLeft} on > &lt; </RkButton>
+          <RkButton style={styles.floatButtonRight}> &gt; </RkButton> 
+          <Avatar img={this.state.data.photo} rkType='big' />
+          <RkText rkType='header3'>{`${this.state.data.name} ${this.state.data.className} `}</RkText>
+        </View>
+      </GestureRecognizer>
       <View style={[styles.userInfo, styles.bordered]}>
-        {/* <View style={styles.section}>
-          <RkText rkType='header3' style={styles.space}>{this.state.data.postCount}</RkText>
-          <RkText rkType='secondary1 hintColor'>Posts</RkText>
-        </View> */}
         <View style={styles.section}>
           <RkText rkType='header5' style={styles.space}>班主任：{this.state.data.principleTeacher} </RkText>
           <RkText rkType='secondary1 hintColor'>给老师发邮件 {this.state.data.principleTeacherEmail} </RkText>
@@ -66,6 +123,7 @@ export class MyChildProfile extends React.Component {
       {/* <Gallery items={this.state.data.images} /> */}
     </ScrollView>
   );
+  }
 }
 
 const styles = RkStyleSheet.create(theme => ({
@@ -108,4 +166,25 @@ const styles = RkStyleSheet.create(theme => ({
     flex: 1,
     alignSelf: 'center',
   },
+  floatButtonRight:{
+    width: 25,  
+    height: 25,   
+    borderRadius: 12.5,            
+    backgroundColor: "#D3D3D3",
+    transparent:0.6,                                    
+    position: 'absolute',                                          
+    top:20,                                                    
+    right: 20, 
+  },
+  floatButtonLeft:{
+  
+    width: 25,  
+    height: 25,   
+    borderRadius: 12.5,            
+    backgroundColor: "#D3D3D3",
+    transparent:0.6,                                    
+    position: 'absolute',                                          
+    top:20,                                                    
+    left: 20, 
+  }
 }));

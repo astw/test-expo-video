@@ -9,6 +9,7 @@ import {
   RkTheme,
 } from 'react-native-ui-kitten';
 import { FontAwesome } from '../../assets/icons';
+import { number } from 'prop-types';
 
 export class Avatar extends RkComponent {
   componentName = 'Avatar';
@@ -18,6 +19,7 @@ export class Avatar extends RkComponent {
     badge: {},
     badgeText: {},
   };
+ 
 
   getBadgeStyle = (badgeProps) => {
     switch (badgeProps) {
@@ -37,15 +39,22 @@ export class Avatar extends RkComponent {
     }
   };
  
-  renderImg = (styles) => (
-    
-    <View>
-      {/* <Image style={styles.image} source={this.props.img} /> */}
-      <Image style={styles.image} source = {{uri:this.props.img}} />
-      { this.props.badge && this.renderBadge(styles.badge)}
-    </View>
-
-  );
+  renderImg = (styles) => { 
+    if(typeof this.props.img == 'number'){
+      return ( 
+        <View>
+            <Image style={styles.image} source={this.props.img} />
+            { this.props.badge && this.renderBadge(styles.badge)}
+        </View>
+      ); 
+    } 
+    return (
+      <View> 
+          <Image style={styles.image} source = {{uri:this.props.img}} /> 
+         { this.props.badge && this.renderBadge(styles.badge)}
+       </View>
+    );    
+  };
 
   renderBadge = (style, textStyle) => {
     const badgeStyle = this.getBadgeStyle(this.props.badge);
