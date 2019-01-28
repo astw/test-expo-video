@@ -25,14 +25,14 @@ export class MyChildProfile extends React.Component {
   };
 
   state = {
-    data: undefined,
+    child: undefined,
   };
 
   constructor(props) {
     super(props);  
     const id = this.props.navigation.getParam('id', 1);  
     this.state = {
-      data:{name:"", className:""},
+      child:{name:"", className:""},
       children:[],
       currentIndex:0
     }; 
@@ -44,7 +44,7 @@ export class MyChildProfile extends React.Component {
 
       this.setState({
         children:children,
-        data:children[0]
+        child:children[0]
       })
 
       console.log(this.data.name, this.data.className);
@@ -69,7 +69,7 @@ export class MyChildProfile extends React.Component {
 
     let user = this.state.children[this.state.currentIndex]; 
 
-    this.setState({data: user})
+    this.setState({child: user})
 
     console.log('You swiped left!');
   }
@@ -127,20 +127,23 @@ export class MyChildProfile extends React.Component {
         //   backgroundColor: this.state.backgroundColor
         // }}
         >
-        <View style={[styles.header, styles.bordered]}> 
-          <RkButton style={styles.floatButtonLeft} on > &lt; </RkButton>
-          <RkButton style={styles.floatButtonRight}> &gt; </RkButton> 
-          <Avatar img={this.state.data.photo} rkType='big' />
-          <RkText rkType='header3'>{`${this.state.data.name} ${this.state.data.className} `}</RkText>
+        <View style={[styles.header, styles.bordered]}>  
+            <RkButton style={styles.floatButtonLeft} on > &lt; </RkButton>
+          }
+          if({this.state.currentIndex} == 0) {
+             <RkButton style={styles.floatButtonRight}> &gt; </RkButton> 
+          }
+          <Avatar img={this.state.child.photo} rkType='big' />
+          <RkText rkType='header3'>{`${this.state.child.name} ${this.state.child.className} `}</RkText>
         </View>
       </GestureRecognizer>
       <View style={[styles.userInfo, styles.bordered]}>
         <View style={styles.section}>
-          <RkText rkType='header5' style={styles.space}>班主任：{this.state.data.principleTeacher} </RkText>
-          <RkText rkType='secondary1 hintColor'>给老师发邮件 {this.state.data.principleTeacherEmail} </RkText>
+          <RkText rkType='header5' style={styles.space}>班主任：{this.state.child.principleTeacher} </RkText>
+          <RkText rkType='secondary1 hintColor'>给老师发邮件 {this.state.child.principleTeacherEmail} </RkText>
         </View>
         {/* <View style={styles.section}>
-          <RkText rkType='header3' style={styles.space}>{this.state.data.followingCount}</RkText>
+          <RkText rkType='header3' style={styles.space}>{this.state.child.followingCount}</RkText>
           <RkText rkType='secondary1 hintColor'>Following</RkText>
         </View> */}
       </View>
