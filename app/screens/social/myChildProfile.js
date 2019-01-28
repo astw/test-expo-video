@@ -12,7 +12,7 @@ import { Gallery } from '../../components/gallery';
 import { data } from '../../data/';
 import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
-import {Articles3} from '../articles';
+import {Activities} from '../articles';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
 
 export class MyChildProfile extends React.Component { 
@@ -150,7 +150,7 @@ export class MyChildProfile extends React.Component {
       <View style={styles.buttons}>
       
       </View>
-      <Articles3 navigation={this.props.navigation} naem="dsfsdfsd" activities={this.state.child.activities} /> 
+      <Activities navigation={this.props.navigation} naem="dsfsdfsd" activities={this.state.child.activities} /> 
       {/* <Gallery items={this.state.child.images} /> */}
     </ScrollView>
   );

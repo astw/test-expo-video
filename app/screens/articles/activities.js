@@ -16,7 +16,7 @@ import axios from 'axios';
 
 const moment = require('moment'); 
 
-export class Articles3 extends React.Component {
+export class Activities extends React.Component {
 
   constructor(props){
     super(props); 
