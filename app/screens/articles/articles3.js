@@ -12,34 +12,31 @@ import {
 import { SocialBar } from '../../components';
 import { data } from '../../data';
 import NavigationType from '../../config/navigation/propTypes';
-import axios from 'axios';
+import axios from 'axios'; 
 
-const moment = require('moment');
-
-
-let url = 'https://jsonplaceholder.typicode.com/users';
+const moment = require('moment'); 
 
 export class Articles3 extends React.Component {
 
-  constructor(){
-    super();
-    this.state = {data: []}; 
+  constructor(props){
+    super(props); 
+    console.log('-----props------------', this.props);
+    console.log(this.props.activities.length)
+    state = {
+      data: this.props.activities
+    }
   }
 
- async componentDidMount(){ 
-//   const response = await fetch(url);
-//   const json = await response.json(); 
-//   this.setState({ data: json });
-  
-    let pp = await data.getRandomUser(3);
-    pp = pp.map((i, index) =>{
-       let ic = i; 
-       ic.id = index;
-       ic.photo = i.picture.large; 
-       return ic;
-    })  
-    this.setState({data: pp})
-  }
+//  async componentDidMount(){   
+//     let pp = await data.getRandomUser(3);
+//     pp = pp.map((i, index) =>{
+//        let ic = i; 
+//        ic.id = index;
+//        ic.photo = i.picture.large; 
+//        return ic;
+//     })  
+//     this.setState({data: pp})
+//   }
 
   static propTypes = {
     navigation: NavigationType.isRequired,
@@ -49,7 +46,7 @@ export class Articles3 extends React.Component {
   };
 
   // state = {
-  //   data: data.getArticles(),
+   
   // };
 
   extractItemKey = (item) => `${item.id}`;
@@ -80,7 +77,8 @@ export class Articles3 extends React.Component {
 
   render = () => (
     <FlatList
-      data={this.state.data}
+      // data={this.state.data}
+      data={this.props.activities}
       renderItem={this.renderItem}
       keyExtractor={this.extractItemKey}
       style={styles.container}

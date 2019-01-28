@@ -32,8 +32,13 @@ export class MyChildProfile extends React.Component {
     super(props);  
     const id = this.props.navigation.getParam('id', 1);  
     this.state = {
-      child:{name:"", className:""},
+      child:{
+        name:"", 
+        className:"",
+        activities:[]
+      },
       children:[],
+
       currentIndex:0
     }; 
   }
@@ -145,7 +150,7 @@ export class MyChildProfile extends React.Component {
       <View style={styles.buttons}>
       
       </View>
-      <Articles3 navigation={this.props.navigation} /> 
+      <Articles3 navigation={this.props.navigation} naem="dsfsdfsd" activities={this.state.child.activities} /> 
       {/* <Gallery items={this.state.child.images} /> */}
     </ScrollView>
   );

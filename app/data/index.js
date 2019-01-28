@@ -18,13 +18,17 @@ class DataProvider {
     users[0].className = '五五班';
     users[0].principleTeacher = "张曼";
     users[0].principleTeacherEmail = "wangman@163.com";
+    users[0].activities = this.getArticles().slice(0, 2);
 
     users[1].name = "王淯之"
     users[1].photo = users[1].picture.large;  
     users[1].className = '五三班';
     users[1].principleTeacher = "李雯";
     users[1].principleTeacherEmail = "liwen@gmail.com"; 
+    users[1].activities = this.getArticles().slice(3,10);
 
+    console.log('----- get articles ----')
+    console.log(this.getArticles());
     return users;
   }
 
