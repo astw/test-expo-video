@@ -9,16 +9,23 @@ import axisos from 'axios';
 
 class DataProvider {
 
-  async getMyChildProfile(id =1){ 
-    let users = await this.getRandomUser(2);    
-    let user = users[0];  
-    user.name = "王涬之"
-    user.photo = user.picture.large;  
-    user.className = '五五班';
-    user.principleTeacher = "张曼";
-    user.principleTeacherEmail = "wangman@163.com";
+  async getMyChildProfile(count =2){ 
 
-    return user;
+    let users = await this.getRandomUser(count);    
+  
+    users[0].name = "王涬之"
+    users[0].photo = users[0].picture.large;  
+    users[0].className = '五五班';
+    users[0].principleTeacher = "张曼";
+    users[0].principleTeacherEmail = "wangman@163.com";
+
+    users[1].name = "王淯之"
+    users[1].photo = users[1].picture.large;  
+    users[1].className = '五三班';
+    users[1].principleTeacher = "李雯";
+    users[1].principleTeacherEmail = "liwen@gmail.com"; 
+
+    return users;
   }
 
   async getOneUser(id = 1) {

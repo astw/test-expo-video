@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; 
 import {
   View,
   ScrollView,
@@ -13,11 +13,12 @@ import { data } from '../../data/';
 import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
 import {Articles3} from '../articles';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
 
-export class MyChildProfile extends React.Component {
+export class MyChildProfile extends React.Component { 
+ 
   static propTypes = {
-    navigation: NavigationType.isRequired,
+    navigation: NavigationType.isRequired 
   };
   static navigationOptions = {
     title: ''
@@ -28,21 +29,25 @@ export class MyChildProfile extends React.Component {
   };
 
   constructor(props) {
-    super(props);
-    const id = this.props.navigation.getParam('id', 1); 
-    // this.state.data = data.getUser(id);
+    super(props);  
+    const id = this.props.navigation.getParam('id', 1);  
     this.state = {
       data:{name:"", className:""},
-      myText: 'I\'m ready to get swiped!',
-      gestureName: 'none',
-      backgroundColor: '#fff'
-    };
+      children:[],
+      currentIndex:0
+    }; 
   }
    
-  async componentWillMount(){
-      let user = await data.getMyChildProfile(); 
-      // MyChildProfile.navigationOptions.title = user.className;
-      this.setState({data: user})
+  async componentDidMount(){
+      let children = await data.getMyChildProfile();  
+      // MyChildProfile.navigationOptions.title = user.className; 
+
+      this.setState({
+        children:children,
+        data:children[0]
+      })
+
+      console.log(this.data.name, this.data.className);
   }  
 
   onSwipeDown(gestureState) {
@@ -50,15 +55,38 @@ export class MyChildProfile extends React.Component {
   }
 
   async onSwipeLeft(gestureState) {
-    let user = await data.getMyChildProfile(); 
+    //let user = await data.getMyChildProfile(); 
     // MyChildProfile.navigationOptions.title = user.className;
+
+    let count = this.state.children.length; 
+    let index = this.state.currentIndex; 
+
+    if(index == 0){
+      this.setState({currentIndex: count -1});
+    } else {
+      this.setState({currentIndex: --index});
+    }
+
+    let user = this.state.children[this.state.currentIndex]; 
+
     this.setState({data: user})
 
     console.log('You swiped left!');
   }
 
-  async onSwipeRight(gestureState) {
-    let user = await data.getMyChildProfile(); 
+  async onSwipeRight(gestureState) { 
+
+    let count = this.state.children.length; 
+    let index = this.state.currentIndex; 
+
+    if(index == count -1){
+      this.setState({currentIndex: 0});
+    } else {
+      this.setState({currentIndex: ++index});
+    }
+
+    let user = this.state.children[this.state.currentIndex]; 
+
     // MyChildProfile.navigationOptions.title = user.className;
     this.setState({data: user})
 
@@ -171,7 +199,7 @@ const styles = RkStyleSheet.create(theme => ({
     height: 25,   
     borderRadius: 12.5,            
     backgroundColor: "#D3D3D3",
-    transparent:0.6,                                    
+    opacity:0.6,                                    
     position: 'absolute',                                          
     top:20,                                                    
     right: 20, 
@@ -182,7 +210,7 @@ const styles = RkStyleSheet.create(theme => ({
     height: 25,   
     borderRadius: 12.5,            
     backgroundColor: "#D3D3D3",
-    transparent:0.6,                                    
+    opacity:0.6,                                    
     position: 'absolute',                                          
     top:20,                                                    
     left: 20, 
