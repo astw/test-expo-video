@@ -45,9 +45,7 @@ export class MyChildProfile extends React.Component {
       this.setState({
         children:children,
         child:children[0]
-      })
-
-      console.log(this.data.name, this.data.className);
+      }) 
   }  
 
   onSwipeDown(gestureState) {
@@ -88,7 +86,7 @@ export class MyChildProfile extends React.Component {
     let user = this.state.children[this.state.currentIndex]; 
 
     // MyChildProfile.navigationOptions.title = user.className;
-    this.setState({data: user})
+    this.setState({child: user})
 
     console.log('You swiped right!');
   }
@@ -128,11 +126,8 @@ export class MyChildProfile extends React.Component {
         // }}
         >
         <View style={[styles.header, styles.bordered]}>  
-            <RkButton style={styles.floatButtonLeft} on > &lt; </RkButton>
-          }
-          if({this.state.currentIndex} == 0) {
-             <RkButton style={styles.floatButtonRight}> &gt; </RkButton> 
-          }
+          <RkButton style={styles.floatButtonLeft} on > &lt; </RkButton>
+          <RkButton style={styles.floatButtonRight}> &gt; </RkButton>  
           <Avatar img={this.state.child.photo} rkType='big' />
           <RkText rkType='header3'>{`${this.state.child.name} ${this.state.child.className} `}</RkText>
         </View>
@@ -151,7 +146,7 @@ export class MyChildProfile extends React.Component {
       
       </View>
       <Articles3 navigation={this.props.navigation} /> 
-      {/* <Gallery items={this.state.data.images} /> */}
+      {/* <Gallery items={this.state.child.images} /> */}
     </ScrollView>
   );
   }
