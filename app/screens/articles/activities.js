@@ -90,10 +90,12 @@ const styles = RkStyleSheet.create(theme => ({
   container: {
     backgroundColor: theme.colors.screen.scroll,
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: 18,
   },
   card: {
-    marginVertical: 8,
+    marginVertical: 28,
+    margin:40,
+    // paddingHorizontal:40
   },
   footer: {
     paddingTop: 16,
