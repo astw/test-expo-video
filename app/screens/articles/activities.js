@@ -13,15 +13,14 @@ import { SocialBar } from '../../components';
 import { data } from '../../data';
 import NavigationType from '../../config/navigation/propTypes';
 import axios from 'axios'; 
+import { Comments, ClassComments} from '../messaging';
 
 const moment = require('moment'); 
 
 export class Activities extends React.Component {
 
   constructor(props){
-    super(props); 
-    console.log('-----props------------', this.props);
-    console.log(this.props.activities.length)
+    super(props);  
     state = {
       data: this.props.activities
     }
@@ -68,8 +67,13 @@ export class Activities extends React.Component {
           </View>
         </View>
         <Image rkCardImg source={item.photo} />
+
+
+          <ClassComments  />
+          
         <View style={styles.footer} rkCardFooter>
-          <SocialBar />
+          {/* <SocialBar /> */}
+          
         </View >
       </RkCard>
     </TouchableOpacity>

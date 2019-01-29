@@ -26,9 +26,7 @@ class DataProvider {
     users[1].principleTeacher = "李雯";
     users[1].principleTeacherEmail = "liwen@gmail.com"; 
     users[1].activities = this.getArticles().slice(3,10);
-
-    console.log('----- get articles ----')
-    console.log(this.getArticles());
+ 
     return users;
   }
 
@@ -78,6 +76,14 @@ class DataProvider {
 
   getComments(postId = 1) {
     return this.getArticle(postId).comments;
+  }
+
+  getClassComments(){
+    //on get comments of mine, and my children 
+    //fake
+    let comments = this.getComments(1).slice(0,2);  
+    
+    return comments;
   }
 
   getCards() {
