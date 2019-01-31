@@ -78,10 +78,20 @@ class DataProvider {
     return this.getArticle(postId).comments;
   }
 
+   async postAComments(text){ 
+     //TODO: post a comment  
+    let comments = this.getComments(); 
+    let comment = _.clone(comments[0]);  
+    comment.id = comment.length;
+    comment.text = text;
+    comments.push(comment);  
+    return comments; 
+  }
+
   getClassComments(){
     //on get comments of mine, and my children 
     //fake
-    let comments = this.getComments(1).slice(0,2);  
+    let comments = this.getComments(1);
     
     return comments;
   }

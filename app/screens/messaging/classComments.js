@@ -34,8 +34,26 @@ export class ClassComments extends React.Component {
     super(props);
     this.state = {
       data: data.getClassComments(),
-    };   
+      message: ''
+    };  
+
+    // this.onSendButtonPressed = this.onSendButtonPressed.bind(this);
   }
+
+   onSendButtonPressed = async () =>{ 
+    if (!this.state.message) {
+      return;
+    } 
+    
+    await data.postAComments(this.state.message)
+    .then((comments)=>{ 
+        this.setState({data: comments})
+    }); 
+  };
+
+  onInputChanged = (text) => {
+    this.setState({ message: text });
+  };
 
   renderSeparator = () => (
     <View style={styles.separator} />
@@ -64,7 +82,7 @@ export class ClassComments extends React.Component {
           data={this.state.data}
           extraData={this.state}
           ItemSeparatorComponent={this.renderSeparator}
-          keyExtractor={this.extractItemKey}
+        //  keyExtractor={this.extractItemKey}
           renderItem={this.renderItem}
         />    
       <View style={styles.footer}>
@@ -72,6 +90,8 @@ export class ClassComments extends React.Component {
           <RkText rkType='awesome secondaryColor'>{FontAwesome.plus}</RkText>
         </RkButton>
         <RkTextInput 
+          onChangeText={this.onInputChanged}
+          value={this.state.message}
           multiline={true}
           rkType='row sticker'
           placeholder="Add a comment..."
