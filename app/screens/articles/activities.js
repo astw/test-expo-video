@@ -58,7 +58,8 @@ export class Activities extends React.Component {
     <TouchableOpacity
       delayPressIn={70}
       activeOpacity={0.8}
-      onPress={() => this.onItemPressed(item)}>
+      // onPress={() => this.onItemPressed(item)}
+      >
       <RkCard style={styles.card}>
         <View rkCardHeader>
           <View>
@@ -70,7 +71,7 @@ export class Activities extends React.Component {
 
 
           <ClassComments  />
-          
+
         <View style={styles.footer} rkCardFooter>
           {/* <SocialBar /> */}
           
