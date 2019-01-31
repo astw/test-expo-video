@@ -18,6 +18,8 @@ import NavigationType from '../../config/navigation/propTypes';
 import {Activities} from '../articles';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
 
+import { ClassBar, SocialBar } from '../../components';
+
 import { FontAwesome } from '../../assets/icons';
 
 export class MyChildProfile extends React.Component { 
@@ -175,14 +177,8 @@ export class MyChildProfile extends React.Component {
       {/* <Gallery items={this.state.child.images} /> */}
 
     </ScrollView>
-      <View style={styles.footer}>
-        <RkButton style={styles.plus} rkType='clear'>
-          <RkText rkType='awesome secondaryColor'>{FontAwesome.plus}</RkText>
-        </RkButton>
-        
-        <RkButton onPress={this.onSendButtonPressed} style={styles.send} rkType='circle highlight'>
-          <Image source={require('../../assets/icons/sendIcon.png')} />
-        </RkButton>
+      <View style={styles.footer} rkCardFooter> 
+          <ClassBar showLabel={true} />  
       </View>
 
     </RkAvoidKeyboard>
