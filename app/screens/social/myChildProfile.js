@@ -15,6 +15,8 @@ import NavigationType from '../../config/navigation/propTypes';
 import {Activities} from '../articles';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
 
+import { FontAwesome } from '../../assets/icons';
+
 export class MyChildProfile extends React.Component { 
  
   static propTypes = {
@@ -118,6 +120,19 @@ export class MyChildProfile extends React.Component {
       directionalOffsetThreshold: 80
     };
     
+    let leftButton, rightButton; 
+    if(this.state.currentIndex != 0){
+      leftButton =  <RkButton style={styles.floatButtonLeft} rkType='clear'>  
+                      <RkText rkType='awesome secondaryColor'>{FontAwesome.chevronLeft}</RkText>
+                    </RkButton> 
+    }
+  
+    if(this.state.currentIndex != this.state.children.length -1){ 
+      rightButton = <RkButton style={styles.floatButtonRight} rkType='clear'>
+                       <RkText rkType='awesome secondaryColor'>{FontAwesome.chevronRight}</RkText>
+                    </RkButton>  
+    }
+    
     return (
     <ScrollView style={styles.root}>
     <GestureRecognizer
@@ -131,8 +146,8 @@ export class MyChildProfile extends React.Component {
         // }}
         >
         <View style={[styles.header, styles.bordered]}>  
-          <RkButton style={styles.floatButtonLeft} on > &lt; </RkButton>
-          <RkButton style={styles.floatButtonRight}> &gt; </RkButton>  
+          {leftButton}
+          {rightButton}
           <Avatar img={this.state.child.photo} rkType='big' />
           <RkText rkType='header3'>{`${this.state.child.name} ${this.state.child.className} `}</RkText>
         </View>
