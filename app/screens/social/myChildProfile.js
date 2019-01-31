@@ -1,11 +1,14 @@
 import React from 'react'; 
 import {
   View,
-  ScrollView,
+  ScrollView, 
+  Image,
+  Keyboard,
 } from 'react-native';
 import {
   RkText,
   RkButton, RkStyleSheet,
+  RkAvoidKeyboard,
 } from 'react-native-ui-kitten';
 import { Avatar } from '../../components/avatar';
 import { Gallery } from '../../components/gallery';
@@ -134,6 +137,9 @@ export class MyChildProfile extends React.Component {
     }
     
     return (
+      <RkAvoidKeyboard
+      style={styles.container}
+      onResponderRelease={Keyboard.dismiss}>
     <ScrollView style={styles.root}>
     <GestureRecognizer
         onSwipe={(direction, state) => this.onSwipe(direction, state)} 
@@ -167,13 +173,36 @@ export class MyChildProfile extends React.Component {
       </View>
       <Activities navigation={this.props.navigation} naem="dsfsdfsd" activities={this.state.child.activities} /> 
       {/* <Gallery items={this.state.child.images} /> */}
+
     </ScrollView>
+      <View style={styles.footer}>
+        <RkButton style={styles.plus} rkType='clear'>
+          <RkText rkType='awesome secondaryColor'>{FontAwesome.plus}</RkText>
+        </RkButton>
+        
+        <RkButton onPress={this.onSendButtonPressed} style={styles.send} rkType='circle highlight'>
+          <Image source={require('../../assets/icons/sendIcon.png')} />
+        </RkButton>
+      </View>
+
+    </RkAvoidKeyboard>
   );
   }
 }
 
 const styles = RkStyleSheet.create(theme => ({
   root: {
+    backgroundColor: theme.colors.screen.base,
+  },
+
+  footer: {
+    flexDirection: 'row',
+    minHeight: 60,
+    padding: 10,
+    backgroundColor: theme.colors.screen.alter,
+  },
+  container: {
+    flex: 1,
     backgroundColor: theme.colors.screen.base,
   },
   header: {
