@@ -59,6 +59,8 @@ export class ClassComments extends React.Component {
     <View style={styles.separator} />
   );
 
+  extractItemKey = (item) => `${item.id}`;
+
   renderItem = ({ item }) => (
     <View style={styles.container}>
       <TouchableOpacity >
@@ -82,7 +84,7 @@ export class ClassComments extends React.Component {
           data={this.state.data}
           extraData={this.state}
           ItemSeparatorComponent={this.renderSeparator}
-        //  keyExtractor={this.extractItemKey}
+          keyExtractor={this.extractItemKey}
           renderItem={this.renderItem}
         />    
       <View style={styles.footer}>

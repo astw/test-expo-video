@@ -67,15 +67,9 @@ export class Activities extends React.Component {
             <RkText rkType='secondary2 hintColor'>{moment().add(item.time, 'seconds').fromNow()}</RkText>
           </View>
         </View>
-        <Image rkCardImg source={item.photo} />
+        <Image rkCardImg source={item.photo} /> 
+          <ClassComments  /> 
 
-
-          <ClassComments  />
-
-        <View style={styles.footer} rkCardFooter>
-          {/* <SocialBar /> */}
-          
-        </View >
       </RkCard>
     </TouchableOpacity>
   );

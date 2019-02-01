@@ -1,3 +1,5 @@
+import { string } from "prop-types";
+
 export const FontIcons = {
   login: '',
   navigation: '',
@@ -13,6 +15,9 @@ export const FontIcons = {
 };
 
 export const FontAwesome = {
+  letter: String.fromCharCode(61664),
+  activity: String.fromCharCode(62115),
+  homework: String.fromCharCode(61788),
   heart: String.fromCharCode(61444),
   comment: String.fromCharCode(61669),
   user: String.fromCharCode(62144),

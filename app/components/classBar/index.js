@@ -24,31 +24,20 @@ export class ClassBar extends RkComponent {
   constructor(props) {
     super(props); 
     this.state = {
-      likes: this.props.likes || ClassBar.data.likes,
-      comments: this.props.comments || ClassBar.data.comments,
-      shares: this.props.shares || ClassBar.data.shares,
+     
     };
   }
 
-  onLikeButtonPressed = () => {
-    const defaultCount = ClassBar.data.likes;
-    this.setState({
-      likes: this.state.likes === defaultCount ? this.state.likes + 1 : defaultCount,
-    });
+  onChildButtonPressed = () => {
+     
   };
 
-  onCommentButtonPressed = () => {
-    const defaultCount = ClassBar.data.comments;
-    this.setState({
-      comments: this.state.comments === defaultCount ? this.state.comments + 1 : defaultCount,
-    });
+  onHomeWorkButtonPressed = () => {
+    
   };
 
-  onShareButtonPressed = () => {
-    const defaultCount = ClassBar.data.shares;
-    this.setState({
-      shares: this.state.shares === defaultCount ? this.state.shares + 1 : defaultCount,
-    });
+  onLetterButtonPressed = () => {
+     
   };
 
   render() {
@@ -63,21 +52,21 @@ export class ClassBar extends RkComponent {
     return (
       <View style={container}>
         <View style={section}>
-          <RkButton rkType='clear' onPress={this.onLikeButtonPressed}>
-            <RkText rkType='awesome primary' style={icon}>{FontAwesome.heart}</RkText>
-            <RkText rkType='primary primary4' style={label}>{likes}</RkText>
+          <RkButton rkType='clear' onPress={this.onChildButtonPressed}>
+            <RkText rkType='awesome primary' style={icon}>{FontAwesome.user}</RkText>
+            {/* <RkText rkType='primary primary4' style={label}>{likes}</RkText> */}
           </RkButton>
         </View>
         <View style={section}>
-          <RkButton rkType='clear' onPress={this.onCommentButtonPressed}>
-            <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.comment}</RkText>
-            <RkText rkType='primary4 hintColor' style={label}>{comments}</RkText>
+          <RkButton rkType='clear' onPress={this.onHomeWorkButtonPressed}>
+            <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.homework}</RkText>
+            {/* <RkText rkType='primary4 hintColor' style={label}>{comments}</RkText> */}
           </RkButton>
         </View>
         <View style={section}>
-          <RkButton rkType='clear' onPress={this.onShareButtonPressed}>
-            <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.user}</RkText>
-            <RkText rkType='primary4 hintColor' style={label}>{shares}</RkText>
+          <RkButton rkType='clear' onPress={this.onLetterButtonPressed}>
+            <RkText rkType='awesome hintColor' style={icon}>{FontAwesome.letter}</RkText>
+            {/* <RkText rkType='primary4 hintColor' style={label}>{shares}</RkText> */}
           </RkButton>
         </View>
       </View>

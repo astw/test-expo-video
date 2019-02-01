@@ -17,7 +17,7 @@ import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
 import {Activities} from '../articles';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
-
+import { Navigation } from 'react-native-navigation';
 import { ClassBar, SocialBar } from '../../components';
 
 import { FontAwesome } from '../../assets/icons';
@@ -79,9 +79,7 @@ export class MyChildProfile extends React.Component {
 
     let user = this.state.children[this.state.currentIndex]; 
 
-    this.setState({child: user})
-
-    console.log('You swiped left!');
+    this.setState({child: user}) 
   }
 
   async onSwipeRight(gestureState) { 
@@ -95,12 +93,9 @@ export class MyChildProfile extends React.Component {
       this.setState({currentIndex: ++index});
     }
 
-    let user = this.state.children[this.state.currentIndex]; 
-
+    let user = this.state.children[this.state.currentIndex];
     // MyChildProfile.navigationOptions.title = user.className;
-    this.setState({child: user})
-
-    console.log('You swiped right!');
+    this.setState({child: user}) 
   }
 
   onSwipe(gestureName, gestureState) {
@@ -153,32 +148,32 @@ export class MyChildProfile extends React.Component {
         //   backgroundColor: this.state.backgroundColor
         // }}
         >
+       
+       <View> 
         <View style={[styles.header, styles.bordered]}>  
           {leftButton}
           {rightButton}
           <Avatar img={this.state.child.photo} rkType='big' />
           <RkText rkType='header3'>{`${this.state.child.name} ${this.state.child.className} `}</RkText>
         </View>
-      </GestureRecognizer>
-      <View style={[styles.userInfo, styles.bordered]}>
-        <View style={styles.section}>
-          <RkText rkType='header5' style={styles.space}>班主任：{this.state.child.principleTeacher} </RkText>
-          <RkText rkType='secondary1 hintColor'>给老师发邮件 {this.state.child.principleTeacherEmail} </RkText>
-        </View>
-        {/* <View style={styles.section}>
-          <RkText rkType='header3' style={styles.space}>{this.state.child.followingCount}</RkText>
-          <RkText rkType='secondary1 hintColor'>Following</RkText>
-        </View> */}
-      </View>
-      <View style={styles.buttons}>
-      
-      </View>
-      <Activities navigation={this.props.navigation} naem="dsfsdfsd" activities={this.state.child.activities} /> 
-      {/* <Gallery items={this.state.child.images} /> */}
+        <View style={[styles.userInfo, styles.bordered]}>
+          <View style={styles.section}>
+            <RkText rkType='header5' style={styles.space}>班主任：{this.state.child.principleTeacher} </RkText>
+            <RkText rkType='secondary1 hintColor'>给老师发邮件 {this.state.child.principleTeacherEmail} </RkText>
+          </View>
+          {/* <View style={styles.section}>
+            <RkText rkType='header3' style={styles.space}>{this.state.child.followingCount}</RkText>
+            <RkText rkType='secondary1 hintColor'>Following</RkText>
+          </View> */}
+        </View> 
 
+         <Activities navigation={this.props.navigation} naem="dsfsdfsd" activities={this.state.child.activities} />   
+       </View>  
+       
+      </GestureRecognizer>
     </ScrollView>
       <View style={styles.footer} rkCardFooter> 
-          <ClassBar showLabel={true} />  
+          <ClassBar showLabel={false} />  
       </View>
 
     </RkAvoidKeyboard>
@@ -195,7 +190,7 @@ const styles = RkStyleSheet.create(theme => ({
     flexDirection: 'row',
     minHeight: 60,
     padding: 10,
-    backgroundColor: theme.colors.screen.alter,
+    backgroundColor: theme.colors.screen.alter 
   },
   container: {
     flex: 1,
