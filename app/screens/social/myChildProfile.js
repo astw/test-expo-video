@@ -35,6 +35,8 @@ export class MyChildProfile extends React.Component {
     child: undefined,
   };
 
+  currentView = 'childView';
+
   constructor(props) {
     super(props);  
     const id = this.props.navigation.getParam('id', 1);  
@@ -42,11 +44,11 @@ export class MyChildProfile extends React.Component {
       child:{
         name:"", 
         className:"",
-        activities:[]
+        activities:[],
       },
-      children:[],
-
-      currentIndex:0
+      children:[], 
+      currentIndex:0,
+      currentView:'childView'
     }; 
   }
    
@@ -56,9 +58,30 @@ export class MyChildProfile extends React.Component {
 
       this.setState({
         children:children,
-        child:children[0]
+        child:children[0] 
       }) 
-  }  
+  } 
+  
+  onChildButtonPressed = ()=>{
+      // show child page  
+      this.setState({
+        currentView: 'childView'
+      }); 
+    }
+
+  onHomeWorkButtonPressed = ()=>{
+      // show home work page
+      this.setState({
+        currentView: 'homeWorkView'
+      }); 
+  }
+
+  onLetterButtonPressed = () =>{
+      // show lett page 
+      this.setState({
+        currentView: 'letterView'
+      }); 
+  }
 
   onSwipeDown(gestureState) {
     this.setState({myText: 'You swiped down!'});
@@ -132,6 +155,20 @@ export class MyChildProfile extends React.Component {
                        <RkText rkType='awesome secondaryColor'>{FontAwesome.chevronRight}</RkText>
                     </RkButton>  
     }
+
+    let pageToShow; 
+    if(this.state.currentView === 'childView'){
+        pageToShow =      
+            <Activities navigation={this.props.navigation} naem="dsfsdfsd" 
+                  activities={this.state.child.activities} />   
+
+    } else if(this.state.currentView === 'homeWorkView') {
+       pageToShow = <View>
+                           <RkText rkType='awesome secondaryColor'>"home work"</RkText>
+                     </View>
+    }  else {
+        pageToShow  =  <RkText rkType='awesome secondaryColor'>"letter page"</RkText>
+    }
     
     return (
       <RkAvoidKeyboard
@@ -165,15 +202,19 @@ export class MyChildProfile extends React.Component {
             <RkText rkType='header3' style={styles.space}>{this.state.child.followingCount}</RkText>
             <RkText rkType='secondary1 hintColor'>Following</RkText>
           </View> */}
-        </View> 
-
-         <Activities navigation={this.props.navigation} naem="dsfsdfsd" activities={this.state.child.activities} />   
-       </View>  
+        </View>  
+          { pageToShow }
+        </View>  
        
       </GestureRecognizer>
     </ScrollView>
       <View style={styles.footer} rkCardFooter> 
-          <ClassBar showLabel={false} />  
+          <ClassBar showLabel= {false} 
+              onChildButtonPressed = { this.onChildButtonPressed } 
+              onHomeWorkButtonPressed = { this.onHomeWorkButtonPressed }
+              onLetterButtonPressed = { this.onLetterButtonPressed } 
+              currentView = {this.state.currentView}
+           />  
       </View>
 
     </RkAvoidKeyboard>
