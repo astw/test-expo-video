@@ -25,14 +25,13 @@ export class ClassBar extends RkComponent {
   constructor(props) {
     super(props); 
     this.state = {
-        currentView: this.props.currentView
+        currentView: ''
     }; 
   }
 
-  componentWillReceiveProps(props) {
-    const currentView = this.props.currentView;
-    if (props.currentView != currentView) {
-       this.state.currentView = this.props.currentView;
+  componentWillReceiveProps(nextProps) { 
+    if (this.props.currentView != nextProps.currentView) {
+       this.state.currentView = nextProps.currentView;
     }
   }
 
@@ -59,21 +58,21 @@ export class ClassBar extends RkComponent {
 
     let firstStyle, secondStyle, thirdStyle
 
-    let ss = "awesome primary"
-    let lh = "awesome hintColor"
+    let activeStyle = "awesome primary"
+    let hintColorStyle = "awesome hintColor"
 
-    if(this.state.currentView === 'childView'){
-        firstStyle = ss;
-        secondStyle = lh;
-        thirdStyle = lh; 
-    } else if(this.state.currentView ==='homeWorkView'){
-        firstStyle = lh;
-        secondStyle = ss;
-        thirdStyle = lh; 
-    } else if(this.state.currentView ==='letterView'){
-        firstStyle = lh;
-        secondStyle = lh;
-        thirdStyle = ss; 
+    if(this.state.currentView == 'childView'){
+        firstStyle = activeStyle;
+        secondStyle = hintColorStyle;
+        thirdStyle = hintColorStyle; 
+    } else if(this.state.currentView =='homeWorkView'){
+        firstStyle = hintColorStyle;
+        secondStyle = activeStyle;
+        thirdStyle = hintColorStyle; 
+    } else if(this.state.currentView =='letterView'){
+        firstStyle = hintColorStyle;
+        secondStyle = hintColorStyle;
+        thirdStyle = activeStyle; 
     }
 
     return (
