@@ -35,18 +35,6 @@ export class ClassBar extends RkComponent {
     }
   }
 
-  onChildButtonPressed = () => {
-     console.log('press child')
-  };
-
-  onHomeWorkButtonPressed = () => {
-    
-  };
-
-  onLetterButtonPressed = () => {
-     
-  };
-
   render() {
     const {
       container, section, icon, label,

@@ -4,3 +4,4 @@ export * from './activities';
 export * from './articles4';
 export * from './blogposts';
 export * from './article';
+export * from './homeWork';

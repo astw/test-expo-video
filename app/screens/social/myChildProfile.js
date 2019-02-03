@@ -15,10 +15,10 @@ import { Gallery } from '../../components/gallery';
 import { data } from '../../data/';
 import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
-import {Activities} from '../articles';
+import { Activities, HomeWork } from '../articles';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
 import { Navigation } from 'react-native-navigation';
-import { ClassBar, SocialBar } from '../../components';
+import { ClassBar } from '../../components';
 
 import { FontAwesome } from '../../assets/icons';
 
@@ -163,11 +163,9 @@ export class MyChildProfile extends React.Component {
                   activities={this.state.child.activities} />   
 
     } else if(this.state.currentView === 'homeWorkView') {
-       pageToShow = <View>
-                           <RkText rkType='awesome secondaryColor'>"home work"</RkText>
-                     </View>
+       pageToShow =  <HomeWork child={this.state.child} /> 
     }  else {
-        pageToShow  =  <RkText rkType='awesome secondaryColor'>"letter page"</RkText>
+        pageToShow =  <RkText rkType='awesome secondaryColor'>"letter page"</RkText>
     }
     
     return (
