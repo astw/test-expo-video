@@ -25,7 +25,7 @@ export class ClassBar extends RkComponent {
   constructor(props) {
     super(props); 
     this.state = {
-        currentView: ''
+        currentView: 'childView'
     }; 
   }
 
@@ -40,9 +40,9 @@ export class ClassBar extends RkComponent {
       container, section, icon, label,
     } = this.defineStyles();
 
-    const likes = this.state.likes + (this.props.showLabel ? ' Likes' : '');
-    const comments = this.state.comments + (this.props.showLabel ? ' Comments' : '');
-    const shares = this.state.shares + (this.props.showLabel ? ' Shares' : '');
+    const likes = this.props.showLabel ? ' 活动 ' : '';
+    const comments = this.props.showLabel ? ' 作业 ' : '';
+    const shares = this.props.showLabel ? ' 老师私信 ' : '';
 
     let firstStyle, secondStyle, thirdStyle
 
@@ -66,21 +66,21 @@ export class ClassBar extends RkComponent {
     return (
       <View style={container}>
         <View style={section}>
-          <RkButton rkType='clear' onPress={this.props.onChildButtonPressed}>  
+          <RkButton rkType='clear' style={styles.buttonSection} onPress={this.props.onChildButtonPressed}>  
             <RkText rkType={firstStyle} style={styles.buttonSize}>{FontAwesome.user}</RkText>
-            {/* <RkText rkType='primary primary4' style={label}>{likes}</RkText> */}
+            <RkText rkType={`${firstStyle} primary4`}>{likes}</RkText>
           </RkButton>
         </View>
         <View style={section}>
-          <RkButton rkType='clear' onPress={this.props.onHomeWorkButtonPressed}>
+          <RkButton rkType='clear'  style={styles.buttonSection} onPress={this.props.onHomeWorkButtonPressed}>
             <RkText rkType={secondStyle} style={styles.buttonSize}>{FontAwesome.homework}</RkText>
-            {/* <RkText rkType='primary4 hintColor' style={label}>{comments}</RkText> */}
+            <RkText rkType={`${secondStyle} primary4`}>{comments}</RkText>
           </RkButton>
         </View>
         <View style={section}>
-          <RkButton rkType='clear' onPress={this.props.onLetterButtonPressed}>
+          <RkButton rkType='clear' style={styles.buttonSection} onPress={this.props.onLetterButtonPressed}>
             <RkText rkType={thirdStyle} style={styles.buttonSize}>{FontAwesome.letter}</RkText>
-            {/* <RkText rkType='primary4 hintColor' style={label}>{shares}</RkText> */}
+            <RkText rkType={`${thirdStyle} primary4`}>{shares}</RkText>
           </RkButton>
         </View>
       </View>
@@ -90,10 +90,10 @@ export class ClassBar extends RkComponent {
 
 const styles = RkStyleSheet.create(theme => ({
     buttonSize:{
-        fontSize:32
+        fontSize:24
+    },
+
+    buttonSection:{
+      flexDirection:"column"
     }
-}));
-
-
-
-
+})); 

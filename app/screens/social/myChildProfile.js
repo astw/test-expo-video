@@ -207,7 +207,7 @@ export class MyChildProfile extends React.Component {
       </GestureRecognizer>
     </ScrollView>
       <View style={styles.footer} rkCardFooter> 
-          <ClassBar showLabel= {false} 
+          <ClassBar showLabel= {true} 
               onChildButtonPressed = { this.onChildButtonPressed } 
               onHomeWorkButtonPressed = { this.onHomeWorkButtonPressed }
               onLetterButtonPressed = { this.onLetterButtonPressed } 
