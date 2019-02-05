@@ -41,33 +41,34 @@ export class TeacherMeChatList extends React.Component {
     title: 'Chats List'.toUpperCase(),
   };
 
-  // componentDidMount() {
-  //   if (this.state.child) {
-  //     data.getTeacherPrivateMessage(this.state.child.id)
-  //       .then(( chatList ) => { 
-  //         this.setState({ chatList: chatList}); 
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // } 
+  componentDidMount() {
+    if (this.state.child) {
+      data.getTeacherPrivateMessage(this.state.child.id)
+        .then(( chatList ) => { 
+          this.setState({ chatList: chatList}); 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  } 
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.state.child !== nextProps.child ) {
-  //     this.setState({ child: nextProps.child });
+  componentWillReceiveProps(nextProps) {
+    if (this.state.child !== nextProps.child ) {
+      this.setState({ child: nextProps.child });
 
-  //     if (this.state.child) {
-  //       data.getTeacherPrivateMessage(this.state.child.id)
-  //         .then(( chatList ) => { 
-  //           this.setState({ chatList: chatList}); 
-  //         })
-  //         .catch((err) => {
-  //           console.log(err);
-  //         });
-  //     }
-  //   }
-  // }
+      if (this.state.child) {
+        console.log('id=', this.state.child.id);
+        data.getTeacherPrivateMessage(this.state.child.id)
+          .then(( chatList ) => { 
+            this.setState({ chatList: chatList}); 
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+  }
   extractItemKey = (item) => `${item.withUser.id}`;
   onItemPressed = (item) => {
     const navigationParams = { userId: item.withUser.id };

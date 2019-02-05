@@ -37,7 +37,12 @@ export const MainRoutes = [
     icon: FontIcons.mail,
     screen: Screens.MessagingMenu,
     children: [
-      
+      {
+        id: 'Chat',
+        title: 'Chat',
+        screen: Screens.Chat,
+        children: [],
+      },
       {
         id: 'ChatList',
         title: 'Chat List',
@@ -86,14 +91,7 @@ menuRoutes.unshift({
   id: 'GridV2',
   title: 'Start',
   screen: Screens.GridV2,
-  children: [
-    {
-      id: 'TeacherMeChat',
-      title: 'Chat',
-      screen: Screens.Chat,
-      children: [],
-    }
-  ],
+  children: [],
 });
   
 

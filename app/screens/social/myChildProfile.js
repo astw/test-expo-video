@@ -10,16 +10,15 @@ import {
   RkButton, RkStyleSheet,
   RkAvoidKeyboard,
 } from 'react-native-ui-kitten';
-
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { Avatar } from '../../components/avatar';
 import { Gallery } from '../../components/gallery';
 import { data } from '../../data/';
 import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
 import { Activities, HomeWork } from '../articles';
+import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
+import { Navigation } from 'react-native-navigation';
 import { ClassBar } from '../../components';
-import { TeacherMeChatList } from '../chatWithTeacher';
 import { ChatList } from '../messaging';
 import { FontAwesome } from '../../assets/icons';
 
@@ -158,10 +157,7 @@ export class MyChildProfile extends React.Component {
     } else if(this.state.currentView === 'homeWorkView') {
        pageToShow =  <HomeWork child={this.state.child} /> 
     }  else {
-        // here shows a list of people for my current child who sent messages to me. 
-        // pageToShow = <ChatList navigation={this.props.navigation} child={this.state.child} />
-
-        pageToShow = <ChatList navigation={this.props.navigation} child={this.state.child} />
+        pageToShow = <ChatList  navigation={this.props.navigation} />
     }
     
     return (

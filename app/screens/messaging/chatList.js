@@ -28,8 +28,8 @@ export class ChatList extends React.Component {
 
   state = {
     data: {
-      original: data.getConversation(),
-      filtered: data.getConversation(),
+      original: data.getChatList(),
+      filtered: data.getChatList(),
     },
   };
 

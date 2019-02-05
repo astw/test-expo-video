@@ -114,7 +114,7 @@ class DataProvider {
     return _.find(conversations, x => x.withUser.id === userId);
   }
 
-  getConversation() {
+  getChatList() {
     return conversations;
   }
 
@@ -123,12 +123,12 @@ class DataProvider {
   }
 
   async getTeacherPrivateMessage(studentId) {
-    return this.getConversation();
+    // return this.getConversation();
     // TODO: get teacher private messages
     let chats = this.getConversation(studentId);
     let messages = _.clone(chats);
-    // messages[0].withUser = 0;
-    // messages[1].withUser = 1;
+    messages[0].withUser = 0;
+    messages[1].withUser = 1;
   
     return messages.slice(studentId, 2);
   }
