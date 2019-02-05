@@ -21,6 +21,7 @@ import { Navigation } from 'react-native-navigation';
 import { ClassBar } from '../../components';
 import { ChatList } from '../messaging';
 import { FontAwesome } from '../../assets/icons';
+import { TeacherMeChatList } from '../chatWithTeacher';
 
 export class MyChildProfile extends React.Component { 
   static propTypes = {
@@ -152,12 +153,11 @@ export class MyChildProfile extends React.Component {
     if(this.state.currentView === 'childView'){
         pageToShow =      
             <Activities navigation={this.props.navigation} naem="dsfsdfsd" 
-                  activities={this.state.child.activities} />   
-
+                  activities={this.state.child.activities} /> 
     } else if(this.state.currentView === 'homeWorkView') {
        pageToShow =  <HomeWork child={this.state.child} /> 
     }  else {
-        pageToShow = <ChatList  navigation={this.props.navigation} />
+       pageToShow = <TeacherMeChatList navigation={this.props.navigation} />
     }
     
     return (
