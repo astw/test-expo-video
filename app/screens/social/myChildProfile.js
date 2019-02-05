@@ -157,7 +157,7 @@ export class MyChildProfile extends React.Component {
     } else if(this.state.currentView === 'homeWorkView') {
        pageToShow =  <HomeWork child={this.state.child} /> 
     }  else {
-       pageToShow = <TeacherMeChatList navigation={this.props.navigation} />
+       pageToShow = <TeacherMeChatList navigation={this.props.navigation} child={this.state.child} />
     }
     
     return (

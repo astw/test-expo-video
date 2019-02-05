@@ -125,10 +125,11 @@ class DataProvider {
   async getTeacherPrivateMessage(studentId) {
     // return this.getConversation();
     // TODO: get teacher private messages
-    let chats = this.getConversation(studentId);
+    let chats = this.getChatList();
+    console.log(chats.length,  ' chat length')
     let messages = _.clone(chats);
-    messages[0].withUser = 0;
-    messages[1].withUser = 1;
+    messages[0].withUserId = 0;
+    messages[1].withUserId = 1;
   
     return messages.slice(studentId, 2);
   }

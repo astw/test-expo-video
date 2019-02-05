@@ -1,6 +1,4 @@
-
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   FlatList,
   View,
@@ -13,21 +11,24 @@ import {
   RkText,
   RkTextInput,
 } from 'react-native-ui-kitten';
-import { Navigation } from 'react-native-navigation';
 import { Avatar } from '../../components';
 import { FontAwesome } from '../../assets/icons';
 import { data } from '../../data';
-import NavigationType from '../../config/navigation/propTypes'; 
+import NavigationType from '../../config/navigation/propTypes';
 
 const moment = require('moment');
-//chat between teachers and me
-//multiple teachers will show mulitple lines. 
 
 export class TeacherMeChatList extends React.Component {
+  static propTypes = {
+    navigation: NavigationType.isRequired,
+  };
+  static navigationOptions = {
+    title: 'Chats List'.toUpperCase(),
+  };
 
   state = { 
-      chatList: data.getConversation(),
-      child: null, 
+      chatList: data.getChatList(), 
+      child:{} 
   };
 
   constructor(props) {
@@ -35,11 +36,10 @@ export class TeacherMeChatList extends React.Component {
     this.state.child = props.child; 
   }
 
-  static propTypes = {
-    navigation: NavigationType.isRequired, 
-  };
-  static navigationOptions = {
-    title: 'Chats List'.toUpperCase(),
+  extractItemKey = (item) => `${item.withUser.id}`;
+
+  onInputChanged = (event) => {
+     
   };
 
   componentDidMount() {
@@ -47,6 +47,7 @@ export class TeacherMeChatList extends React.Component {
       data.getTeacherPrivateMessage(this.state.child.id)
         .then(( chatList ) => { 
           this.setState({ chatList: chatList}); 
+          console.log('in did mount:', chatList);
         })
         .catch((err) => {
           console.log(err);
@@ -55,14 +56,17 @@ export class TeacherMeChatList extends React.Component {
   } 
 
   componentWillReceiveProps(nextProps) {
+
+    console.log('component will receive props ....'); 
     if (this.state.child !== nextProps.child ) {
       this.setState({ child: nextProps.child });
 
+      console.log('component will receive props ....', this.state.child.id); 
       if (this.state.child) {
         console.log('id=', this.state.child.id);
         data.getTeacherPrivateMessage(this.state.child.id)
           .then(( chatList ) => { 
-            this.setState({ chatList: chatList}); 
+            this.setState({ chatList: chatList }); 
           })
           .catch((err) => {
             console.log(err);
@@ -70,10 +74,9 @@ export class TeacherMeChatList extends React.Component {
       }
     }
   }
-  extractItemKey = (item) => `${item.withUser.id}`;
+
   onItemPressed = (item) => {
     const navigationParams = { userId: item.withUser.id };
-    console.log('navigationParams = ', navigationParams); 
     this.props.navigation.navigate('Chat', navigationParams);
   };
 
@@ -86,7 +89,8 @@ export class TeacherMeChatList extends React.Component {
   );
 
   renderHeader = () => (
-    <View style={styles.searchContainer} />
+    <View style={styles.searchContainer}> 
+    </View>
   );
 
   renderItem = ({ item }) => {
@@ -156,3 +160,4 @@ const styles = RkStyleSheet.create(theme => ({
     backgroundColor: theme.colors.border.base,
   },
 }));
+ 
