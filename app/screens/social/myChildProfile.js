@@ -19,8 +19,8 @@ import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
 import { Activities, HomeWork } from '../articles';
 import { ClassBar } from '../../components';
-import { TeacherMeChatList } from '../chatWithTeacher/teacherMeChatList';
-import { ChatList } from '../messaging/chatList';
+import { TeacherMeChatList } from '../chatWithTeacher';
+import { ChatList } from '../messaging';
 import { FontAwesome } from '../../assets/icons';
 
 export class MyChildProfile extends React.Component { 
@@ -161,7 +161,7 @@ export class MyChildProfile extends React.Component {
         // here shows a list of people for my current child who sent messages to me. 
         // pageToShow = <ChatList navigation={this.props.navigation} child={this.state.child} />
 
-        pageToShow = <TeacherMeChatList navigation={this.props.navigation} child={this.state.child} />
+        pageToShow = <ChatList navigation={this.props.navigation} child={this.state.child} />
     }
     
     return (
