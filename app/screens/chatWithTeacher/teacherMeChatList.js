@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   FlatList,
   View,
@@ -11,49 +12,66 @@ import {
   RkText,
   RkTextInput,
 } from 'react-native-ui-kitten';
+import { Navigation } from 'react-native-navigation';
 import { Avatar } from '../../components';
 import { FontAwesome } from '../../assets/icons';
 import { data } from '../../data';
-import NavigationType from '../../config/navigation/propTypes';
+import NavigationType from '../../config/navigation/propTypes'; 
 
 const moment = require('moment');
+//chat between teachers and me
+//multiple teachers will show mulitple lines. 
 
-export class ChatList extends React.Component {
+export class TeacherMeChatList extends React.Component {
+
+  state = { 
+      chatList: data.getConversation(),
+      child: null, 
+  };
+
+  constructor(props) {
+    super(props); 
+    this.state.child = props.child; 
+  }
+
   static propTypes = {
-    navigation: NavigationType.isRequired,
+    navigation: NavigationType.isRequired, 
   };
   static navigationOptions = {
     title: 'Chats List'.toUpperCase(),
   };
 
-  state = {
-    data: {
-      original: data.getConversation(),
-      filtered: data.getConversation(),
-    },
-  };
+  // componentDidMount() {
+  //   if (this.state.child) {
+  //     data.getTeacherPrivateMessage(this.state.child.id)
+  //       .then(( chatList ) => { 
+  //         this.setState({ chatList: chatList}); 
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // } 
 
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.state.child !== nextProps.child ) {
+  //     this.setState({ child: nextProps.child });
+
+  //     if (this.state.child) {
+  //       data.getTeacherPrivateMessage(this.state.child.id)
+  //         .then(( chatList ) => { 
+  //           this.setState({ chatList: chatList}); 
+  //         })
+  //         .catch((err) => {
+  //           console.log(err);
+  //         });
+  //     }
+  //   }
+  // }
   extractItemKey = (item) => `${item.withUser.id}`;
-
-  onInputChanged = (event) => {
-    const pattern = new RegExp(event.nativeEvent.text, 'i');
-    const chats = _.filter(this.state.data.original, chat => {
-      const filterResult = {
-        firstName: chat.withUser.firstName.search(pattern),
-        lastName: chat.withUser.lastName.search(pattern),
-      };
-      return filterResult.firstName !== -1 || filterResult.lastName !== -1 ? chat : undefined;
-    });
-    this.setState({
-      data: {
-        original: this.state.data.original,
-        filtered: chats,
-      },
-    });
-  };
-
   onItemPressed = (item) => {
     const navigationParams = { userId: item.withUser.id };
+    console.log('navigationParams = ', navigationParams); 
     this.props.navigation.navigate('Chat', navigationParams);
   };
 
@@ -66,16 +84,7 @@ export class ChatList extends React.Component {
   );
 
   renderHeader = () => (
-    <View style={styles.searchContainer}>
-      <RkTextInput
-        autoCapitalize='none'
-        autoCorrect={false}
-        onChange={this.onInputChanged}
-        label={this.renderInputLabel()}
-        rkType='row'
-        placeholder='Search'
-      />
-    </View>
+    <View style={styles.searchContainer} />
   );
 
   renderItem = ({ item }) => {
@@ -103,7 +112,7 @@ export class ChatList extends React.Component {
   render = () => (
     <FlatList
       style={styles.root}
-      data={this.state.data.filtered}
+      data={this.state.chatList}
       extraData={this.state}
       ListHeaderComponent={this.renderHeader}
       ItemSeparatorComponent={this.renderSeparator}

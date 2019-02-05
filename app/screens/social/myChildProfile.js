@@ -10,25 +10,25 @@ import {
   RkButton, RkStyleSheet,
   RkAvoidKeyboard,
 } from 'react-native-ui-kitten';
+
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { Avatar } from '../../components/avatar';
 import { Gallery } from '../../components/gallery';
 import { data } from '../../data/';
 import formatNumber from '../../utils/textUtils';
 import NavigationType from '../../config/navigation/propTypes';
 import { Activities, HomeWork } from '../articles';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures'; 
-import { Navigation } from 'react-native-navigation';
 import { ClassBar } from '../../components';
-
+import { TeacherMeChatList } from '../chatWithTeacher/teacherMeChatList';
+import { ChatList } from '../messaging/chatList';
 import { FontAwesome } from '../../assets/icons';
 
 export class MyChildProfile extends React.Component { 
- 
   static propTypes = {
-    navigation: NavigationType.isRequired 
+    navigation: NavigationType.isRequired,
   };
   static navigationOptions = {
-    title: ''
+    title: '',
   };
 
   state = {
@@ -39,7 +39,7 @@ export class MyChildProfile extends React.Component {
 
   constructor(props) {
     super(props);  
-    const id = this.props.navigation.getParam('id', 1);  
+    const id = this.props.navigation.getParam('id', 1);   
     this.state = {
       child:{
         name:"", 
@@ -76,49 +76,42 @@ export class MyChildProfile extends React.Component {
       }); 
   }
 
-  onLetterButtonPressed = () =>{
-      // show lett page 
+  onLetterButtonPressed = () => {
+      // show letter page 
       this.setState({
-        currentView: 'letterView'
-      }); 
+        currentView: 'letterView',
+      });
   }
 
-  onSwipeDown(gestureState) {
-    this.setState({myText: 'You swiped down!'});
-  }
+  onSwipeDown(gestureState) {}
 
-  async onSwipeLeft(gestureState) {
-    //let user = await data.getMyChildProfile(); 
-    // MyChildProfile.navigationOptions.title = user.className;
+  async onSwipeLeft() { 
 
-    let count = this.state.children.length; 
-    let index = this.state.currentIndex; 
+    const count = this.state.children.length;
+    const index = this.state.currentIndex;
 
-    if(index == 0){
-      this.setState({currentIndex: count -1});
+    if (index === 0) {
+      this.setState({ currentIndex: count - 1 });
     } else {
-      this.setState({currentIndex: --index});
+      this.setState({ currentIndex: index - 1 });
     }
 
-    let user = this.state.children[this.state.currentIndex]; 
-
-    this.setState({child: user}) 
+    this.setState({ child: this.state.children[this.state.currentIndex] });
   }
 
-  async onSwipeRight(gestureState) { 
+  async onSwipeRight(gestureState) {
+    const count = this.state.children.length;
+    const index = this.state.currentIndex;
 
-    let count = this.state.children.length; 
-    let index = this.state.currentIndex; 
-
-    if(index == count -1){
-      this.setState({currentIndex: 0});
+    if (index === count - 1) {
+      this.setState({ currentIndex: 0 });
     } else {
-      this.setState({currentIndex: ++index});
+      this.setState({ currentIndex: 1 + index });
     }
 
-    let user = this.state.children[this.state.currentIndex];
+    const user = this.state.children[this.state.currentIndex];
     // MyChildProfile.navigationOptions.title = user.className;
-    this.setState({child: user}) 
+    this.setState({ child: user });
   }
 
   onSwipe(gestureName, gestureState) {
@@ -140,7 +133,7 @@ export class MyChildProfile extends React.Component {
   render = () => {
     const config = {
       velocityThreshold: 0.3,
-      directionalOffsetThreshold: 80
+      directionalOffsetThreshold: 80,
     };
     
     let leftButton, rightButton; 
@@ -150,8 +143,8 @@ export class MyChildProfile extends React.Component {
                     </RkButton> 
     }
   
-    if(this.state.currentIndex != this.state.children.length -1){ 
-      rightButton = <RkButton style={styles.floatButtonRight} rkType='clear'>
+    if(this.state.currentIndex !== this.state.children.length - 1) {
+      rightButton = <RkButton style={styles.floatButtonRight} rkType = 'clear' >
                        <RkText rkType='awesome secondaryColor'>{FontAwesome.chevronRight}</RkText>
                     </RkButton>  
     }
@@ -165,12 +158,15 @@ export class MyChildProfile extends React.Component {
     } else if(this.state.currentView === 'homeWorkView') {
        pageToShow =  <HomeWork child={this.state.child} /> 
     }  else {
-        pageToShow =  <RkText rkType='awesome secondaryColor'>"letter page"</RkText>
+        // here shows a list of people for my current child who sent messages to me. 
+        // pageToShow = <ChatList navigation={this.props.navigation} child={this.state.child} />
+
+        pageToShow = <TeacherMeChatList navigation={this.props.navigation} child={this.state.child} />
     }
     
     return (
       <RkAvoidKeyboard
-      style={styles.container}
+      style={ styles.container }
       onResponderRelease={Keyboard.dismiss}>
     <ScrollView style={styles.root}>
     <GestureRecognizer

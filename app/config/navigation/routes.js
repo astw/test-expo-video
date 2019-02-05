@@ -27,13 +27,7 @@ export const MainRoutes = [
         title: '王淯之',
         screen: Screens.MyChildProfile,
         children: [],
-      },
-      // {
-      //   id: 'Articles3',
-      //   title: '王凌之',
-      //   screen: Screens.MyChildProfile,
-      //   children: [],
-      // }
+      }
     ],
   },
  
@@ -43,12 +37,7 @@ export const MainRoutes = [
     icon: FontIcons.mail,
     screen: Screens.MessagingMenu,
     children: [
-      {
-        id: 'Chat',
-        title: 'Chat',
-        screen: Screens.Chat,
-        children: [],
-      },
+      
       {
         id: 'ChatList',
         title: 'Chat List',
@@ -97,7 +86,15 @@ menuRoutes.unshift({
   id: 'GridV2',
   title: 'Start',
   screen: Screens.GridV2,
-  children: [],
+  children: [
+    {
+      id: 'TeacherMeChat',
+      title: 'Chat',
+      screen: Screens.Chat,
+      children: [],
+    }
+  ],
 });
+  
 
 export const MenuRoutes = menuRoutes;

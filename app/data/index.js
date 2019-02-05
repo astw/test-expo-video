@@ -114,7 +114,7 @@ class DataProvider {
     return _.find(conversations, x => x.withUser.id === userId);
   }
 
-  getChatList() {
+  getConversation() {
     return conversations;
   }
 
@@ -122,14 +122,25 @@ class DataProvider {
     return this.getArticle(postId).comments;
   }
 
-   async postAComments(text){ 
-     //TODO: post a comment  
-    let comments = this.getComments(); 
+  async getTeacherPrivateMessage(studentId) {
+    return this.getConversation();
+    // TODO: get teacher private messages
+    let chats = this.getConversation(studentId);
+    let messages = _.clone(chats);
+    // messages[0].withUser = 0;
+    // messages[1].withUser = 1;
+  
+    return messages.slice(studentId, 2);
+  }
+
+  async postAComments(text) { 
+    // TODO: post comments
+    let comments = this.getComments();
     let comment = _.clone(comments[0]);  
     comment.id = comment.length;
     comment.text = text;
-    comments.push(comment);  
-    return comments; 
+    comments.push(comment);
+    return comments;
   }
 
   getClassComments(){
