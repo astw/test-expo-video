@@ -9,6 +9,10 @@ import axisos from 'axios';
 
 class DataProvider {
 
+  async saveProfile(profile){
+    return true;
+  }
+  
   async getMyChildProfile(count =2){ 
 
     let users = await this.getRandomUser(count);    

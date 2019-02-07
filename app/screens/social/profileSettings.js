@@ -21,40 +21,35 @@ import { FontAwesome } from '../../assets/icons';
 
 export class ProfileSettings extends React.Component {
   static navigationOptions = {
-    title: 'Profile Settings'.toUpperCase(),
+    title: '个人信息'.toUpperCase(),
   };
 
   user = data.getUser();
 
   state = {
-    firstName: this.user.firstName,
-    lastName: this.user.lastName,
+    userName: this.user.userName,
     email: this.user.email,
-    country: this.user.country,
     phone: this.user.phone,
+    secondPhone: this.userSecondPhone,
     password: this.user.password,
     newPassword: this.user.newPassword,
     confirmPassword: this.user.confirmPassword,
   };
 
-  onFirstNameInputChanged = (text) => {
-    this.setState({ firstName: text });
-  };
-
-  onLastNameInputChanged = (text) => {
-    this.setState({ lastName: text });
+  onUserNameInputChanged = (text) => {
+    this.setState({ userName: text });
   };
 
   onEmailInputChanged = (text) => {
     this.setState({ email: text });
   };
 
-  onCountryInputChanged = (text) => {
-    this.setState({ country: text });
-  };
-
   onPhoneInputChanged = (text) => {
     this.setState({ phone: text });
+  };
+
+  onSecondPhoneInputChanged = (text) => {
+    this.setState({ secondPhone: text });
   };
 
   onPasswordInputChanged = (text) => {
@@ -69,6 +64,9 @@ export class ProfileSettings extends React.Component {
     this.setState({ confirmPassword: text });
   };
 
+  onSaveBtnClicked = async ()=> {
+    let result = await data.saveProfile(this.state); 
+  }
   render = () => (
     <ScrollView style={styles.root}>
       <RkAvoidKeyboard>
@@ -76,28 +74,20 @@ export class ProfileSettings extends React.Component {
           <Avatar img={this.user.photo} rkType='big' />
         </View>
         <View style={styles.section}>
-          <View style={[styles.row, styles.heading]}>
-            <RkText rkType='header6 primary'>INFO</RkText>
-          </View>
+          {/* <View style={[styles.row, styles.heading]}> */}
+            {/* <RkText rkType='header6 primary'>个人信息</RkText> */}
+          {/* </View> */}
           <View style={styles.row}>
             <RkTextInput
-              label='First Name'
-              value={this.state.firstName}
+              label='姓名'
+              value={this.state.userName}
               rkType='right clear'
-              onChangeText={this.onFirstNameInputChanged}
+              onChangeText={this.onUserNameInputChanged}
             />
           </View>
           <View style={styles.row}>
             <RkTextInput
-              label='Last Name'
-              value={this.state.lastName}
-              onChangeText={this.onLastNameInputChanged}
-              rkType='right clear'
-            />
-          </View>
-          <View style={styles.row}>
-            <RkTextInput
-              label='Email'
+              label='电子邮件'
               value={this.state.email}
               onChangeText={this.onEmailInputChanged}
               rkType='right clear'
@@ -105,28 +95,28 @@ export class ProfileSettings extends React.Component {
           </View>
           <View style={styles.row}>
             <RkTextInput
-              label='Country'
-              value={this.state.country}
-              onChangeText={this.onCountryInputChanged}
+              label='电话'
+              value={this.state.phone}
+              onChangeText={this.onPhoneInputChanged}
               rkType='right clear'
             />
           </View>
           <View style={styles.row}>
             <RkTextInput
-              label='Phone'
-              value={this.state.phone}
-              onChangeText={this.onPhoneInputChanged}
+              label='电话2'
+              value={this.state.secondPhone}
+              onChangeText={this.onSecondPhoneInputChanged}
               rkType='right clear'
             />
           </View>
         </View>
         <View style={styles.section}>
           <View style={[styles.row, styles.heading]}>
-            <RkText rkType='primary header6'>CHANGE PASSWORD</RkText>
+            <RkText rkType='primary header6'>修改密码</RkText>
           </View>
           <View style={styles.row}>
             <RkTextInput
-              label='Old Password'
+              label='旧密码'
               value={this.state.password}
               rkType='right clear'
               secureTextEntry
@@ -135,7 +125,7 @@ export class ProfileSettings extends React.Component {
           </View>
           <View style={styles.row}>
             <RkTextInput
-              label='New Password'
+              label='新密码'
               value={this.state.newPassword}
               rkType='right clear'
               secureTextEntry
@@ -144,7 +134,7 @@ export class ProfileSettings extends React.Component {
           </View>
           <View style={styles.row}>
             <RkTextInput
-              label='Confirm Password'
+              label='再输入一遍新密码'
               value={this.state.confirmPassword}
               rkType='right clear'
               secureTextEntry
@@ -153,20 +143,10 @@ export class ProfileSettings extends React.Component {
           </View>
         </View>
         <View style={styles.section}>
-          <View style={[styles.row, styles.heading]}>
-            <RkText rkType='primary header6'>CONNECT YOUR ACCOUNT</RkText>
-          </View>
-          <View style={styles.row}>
-            <SocialSetting name='Twitter' icon={FontAwesome.twitter} tintColor={RkTheme.current.colors.twitter} />
-          </View>
-          <View style={styles.row}>
-            <SocialSetting name='Google' icon={FontAwesome.google} tintColor={RkTheme.current.colors.google} />
-          </View>
-          <View style={styles.row}>
-            <SocialSetting name='Facebook' icon={FontAwesome.facebook} tintColor={RkTheme.current.colors.facebook} />
-          </View>
         </View>
-        <GradientButton rkType='large' style={styles.button} text='SAVE' />
+        <GradientButton rkType='large' style={styles.button} text='保存' 
+                        onPress = { this.onSaveBtnClicked }
+         />
       </RkAvoidKeyboard>
     </ScrollView>
   );
