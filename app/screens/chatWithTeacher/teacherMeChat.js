@@ -26,12 +26,25 @@ import NavigationType from '../../config/navigation/propTypes';
 const moment = require('moment');
 
 export class TeacherMeChat extends React.Component {
+
   static propTypes = {
     navigation: NavigationType.isRequired,
   };
+
+  static OtherPerson = {
+
+  } 
+
+  static Me = { 
+  }
   static navigationOptions = ({ navigation }) => {
     const userId = navigation.state.params ? navigation.state.params.userId : undefined;
     const user = data.getUser(userId);
+    TeacherMeChat.OtherPerson = user; 
+    // TODO: to find out the current user ID;
+    // For now just use hard code 10 
+
+    TeacherMeChat.Me = data.getUser(10);
     return ({
       headerTitle: TeacherMeChat.renderNavigationTitle(navigation, user),
       headerRight: TeacherMeChat.renderNavigationAvatar(navigation, user),
@@ -42,7 +55,7 @@ export class TeacherMeChat extends React.Component {
     super(props);
     const userId = this.props.navigation.getParam('userId', undefined);
     this.state = {
-      data: data.getConversation(userId),
+      data: data.getConversation(userId), 
     };
   }
 
@@ -116,14 +129,22 @@ export class TeacherMeChat extends React.Component {
       ? RkTheme.current.colors.chat.messageInBackground
       : RkTheme.current.colors.chat.messageOutBackground;
     const itemStyle = isIncoming ? styles.itemIn : styles.itemOut;
-
+ 
+    let avatorDiv 
+    if(isIncoming){
+      avatorDiv =  <Avatar style={styles.avatar} rkType='small' img={TeacherMeChat.OtherPerson.photo} />
+    } else {
+      avatorDiv =  <Avatar style={styles.avatar} rkType='small' img={TeacherMeChat.Me.photo} />
+    }
     return (
-      <View style={[styles.item, itemStyle]}>
+      <View style={[styles.item, itemStyle]}> 
+        {isIncoming && avatorDiv}
         {!isIncoming && this.renderDate(item.time)}
         <View style={[styles.balloon, { backgroundColor }]}>
           <RkText rkType='primary2 mediumLine chat' style={{ paddingTop: 5 }}>{item.text}</RkText>
         </View>
         {isIncoming && this.renderDate(item.time)}
+        {!isIncoming && avatorDiv}
       </View>
     );
   };

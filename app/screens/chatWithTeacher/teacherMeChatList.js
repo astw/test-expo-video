@@ -56,8 +56,7 @@ export class TeacherMeChatList extends React.Component {
   } 
 
   componentWillReceiveProps(nextProps) {
-
-    console.log('component will receive props ....'); 
+ 
     if (this.state.child !== nextProps.child ) {
       this.setState({ child: nextProps.child });
 
@@ -76,8 +75,8 @@ export class TeacherMeChatList extends React.Component {
   }
 
   onItemPressed = (item) => {
-    const navigationParams = { userId: item.withUser.id };
-    this.props.navigation.navigate('Chat', navigationParams);
+    const navigationParams = { userId: item.withUser.id, };
+    this.props.navigation.navigate('TeacherMeChat', navigationParams);
   };
 
   renderSeparator = () => (

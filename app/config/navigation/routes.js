@@ -50,6 +50,12 @@ export const MainRoutes = [
         children: [],
       },
       {
+        id: 'TeacherMeChat',
+        title: 'Teach & Me Chat List',
+        screen: Screens.TeacherMeChat,
+        children: [],
+      },
+      {
         id: 'Comments',
         title: 'Comments',
         screen: Screens.Comments,
