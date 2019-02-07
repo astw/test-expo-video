@@ -17,7 +17,7 @@ export class GridV2 extends React.Component {
     navigation: NavigationType.isRequired,
   };
   static navigationOptions = {
-    title: 'Grid Menu 2'.toUpperCase(),
+    title: '💜 新 学 年 💜'
   };
 
   state = {

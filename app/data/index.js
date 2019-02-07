@@ -83,6 +83,38 @@ class DataProvider {
     return fakeHomeWork;
   }
   
+  async getTeachersNotices() {
+    let fakeForChild1 =[
+      {
+        id:1, 
+        url:'',
+        type:'text', // text, picture, video 
+        content:'周五下午放学时间 3：30 ', 
+        teacher:{
+          name: '张金平',
+        },
+        dateTime: '2019-02-01 14:36'
+      } 
+    ]
+    let fakeForChild2 =[
+       {
+        id:2, 
+        url:'',
+        type:'text', // text, picture, video 
+        content:'下周一郊游按时， 请家长准备20元车票钱， 午餐自备。',
+        teacher:{
+          name: '张老师',
+        },
+
+        dateTime: '2019-02-01 14:36'
+      }
+    ]
+
+    let fakeNotices =[].concat(fakeForChild1).concat(fakeForChild2); 
+
+    return fakeNotices;
+  }
+
   async getRandomUser(count = 10){
     let testUsers = `https://randomuser.me/api/?results=${count}`;
     let res = await axisos.get(testUsers);   

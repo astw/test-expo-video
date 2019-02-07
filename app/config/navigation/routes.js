@@ -35,27 +35,8 @@ export const MainRoutes = [
     id: 'TeacherAnnoucementMenu',
     title: '老师通知',
     icon: FontIcons.mail,
-    screen: Screens.MessagingMenu,
-    children: [
-      {
-        id: 'Chat',
-        title: 'Chat',
-        screen: Screens.Chat,
-        children: [],
-      },
-      {
-        id: 'ChatList',
-        title: 'Chat List',
-        screen: Screens.ChatList,
-        children: [],
-      },
-     
-      {
-        id: 'Comments',
-        title: 'Comments',
-        screen: Screens.Comments,
-        children: [],
-      },
+    screen: Screens.TeacherNotices,
+    children: [ 
     ],
   },
   
@@ -94,6 +75,6 @@ menuRoutes.unshift({
   screen: Screens.GridV2,
   children: [],
 });
-  
+
 
 export const MenuRoutes = menuRoutes;
