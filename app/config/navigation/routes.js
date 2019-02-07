@@ -14,20 +14,20 @@ export const MainRoutes = [
     id: 'ArticlesMenu',
     title: '我的学生',
     icon: FontIcons.article,
-    screen: Screens.ArticleMenu,
+    screen: Screens.MyChildProfile,
     children: [
       {
-        id: 'Articles1',
-        title: '王涬之',
-        screen: Screens.MyChildProfile,
+        id: 'TeacherMeChat',
+        title: 'Teach & Me Chat',
+        screen: Screens.TeacherMeChat,
         children: [],
       },
       {
-        id: 'Articles3',
-        title: '王淯之',
-        screen: Screens.MyChildProfile,
+        id: 'TeacherMeChatList',
+        title: 'Teach & Me Chat List',
+        screen: Screens.TeacherMeChatList,
         children: [],
-      }
+      } 
     ],
   },
  
@@ -49,12 +49,7 @@ export const MainRoutes = [
         screen: Screens.ChatList,
         children: [],
       },
-      {
-        id: 'TeacherMeChat',
-        title: 'Teach & Me Chat List',
-        screen: Screens.TeacherMeChat,
-        children: [],
-      },
+     
       {
         id: 'Comments',
         title: 'Comments',
