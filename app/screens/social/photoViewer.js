@@ -11,11 +11,15 @@ import {
   CameraRoll,
   PermissionsAndroid
 } from "react-native";
+
 import { RkText, RkButton, RkStyleSheet } from "react-native-ui-kitten";
 
+
+import { ImagePicker } from 'expo';
 import { Gallery } from "../../components";
 
 export class PhotoViewer extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -35,19 +39,38 @@ export class PhotoViewer extends React.Component {
     });
   };
 
-  componentDidMount() {
-    this.loadPhotos()
-      .then(photos => {
-        console.log(photos);
-        this.setState({ photos });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  async componentDidMount() {
+
+    await this._pickImage();
+
+
+    // this.loadPhotos()
+    //   .then(photos => {
+    //     console.log(photos);
+    //     this.setState({ photos });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri });
+    }
+  };
+
+
   render = () => (
-    <ScrollView style={styles.root}> 
+    <ScrollView style={styles.root}>
       <Gallery items={this.state.photos} />
     </ScrollView>
   );

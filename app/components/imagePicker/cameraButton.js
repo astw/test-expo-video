@@ -11,6 +11,7 @@ import {
   PermissionsAndroid
 } from "react-native";
 
+
 import {
   RkText,
   RkButton, 
@@ -22,14 +23,14 @@ export const CameraButton = (props) => {
   navigate = () => {
     props.navigation.navigate("PhotoViewer");
   };
-
+ 
   return (
     <TouchableOpacity style={[styles.cameraBtn]}>
       <View>
         <RkButton
           rkType="clear"
           style={styles.buttonSection}
-          onPress={this.navigate}
+          onPress={props.onPress } 
         >
           <RkText rkType="awesome hintColor" style={styles.cameraIconBtn}>
             {FontAwesome.camera}
