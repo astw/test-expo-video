@@ -8,7 +8,14 @@ export const MainRoutes = [
     title: '个人信息',
     icon: FontIcons.profile,
     screen: Screens.ProfileSettings,
-    children: []
+    children: [
+      {
+        id: 'PhotoViewer',
+        title: '照片',
+        // icon: FontIcons.article,
+        screen: Screens.PhotoViewer,
+      }
+    ]
   },
   {
     id: 'ArticlesMenu',
@@ -39,7 +46,6 @@ export const MainRoutes = [
     children: [ 
     ],
   },
-  
   {
     id: 'ParentEventsMenu',
     title: '家长互动',
@@ -75,6 +81,5 @@ menuRoutes.unshift({
   screen: Screens.GridV2,
   children: [],
 });
-
 
 export const MenuRoutes = menuRoutes;

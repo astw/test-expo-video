@@ -16,8 +16,10 @@ import {
   Avatar,
   SocialSetting,
   GradientButton,
+  CameraButton
 } from '../../components';
 import { FontAwesome } from '../../assets/icons';
+
 
 export class ProfileSettings extends React.Component {
   static navigationOptions = {
@@ -72,6 +74,7 @@ export class ProfileSettings extends React.Component {
       <RkAvoidKeyboard>
         <View style={styles.header}>
           <Avatar img={this.user.photo} rkType='big' />
+          <CameraButton navigation={this.props.navigation} photos={[]} />
         </View>
         <View style={styles.section}>
           {/* <View style={[styles.row, styles.heading]}> */}

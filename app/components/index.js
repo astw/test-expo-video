@@ -13,3 +13,4 @@ export * from './paginationIndicator';
 export * from './passwordTextInput';
 export * from './cardInput';
 export * from './classBar';
+export * from './imagePicker';

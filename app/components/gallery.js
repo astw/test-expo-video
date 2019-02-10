@@ -16,16 +16,24 @@ import { SocialBar } from './socialBar';
 
 export class Gallery extends React.Component {
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.node).isRequired,
+    // items: PropTypes.arrayOf(PropTypes.node).isRequired,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   constructor(props) {
     super(props);
+    
     const itemSize = (Dimensions.get('window').width - 12) / 3;
     this.state = {
       data: this.props.items,
       itemSize,
     };
+  }
+
+  componentWillReceiveProps(newProps){
+    this.setState({
+      data: newProps.items,
+    })  
   }
 
   extractItemKey = (index) => `${index}`;
