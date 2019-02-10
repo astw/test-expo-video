@@ -10,6 +10,8 @@ import axisos from 'axios';
 class DataProvider {
 
   async saveProfile(profile){
+    //todo: include saving information, password, and save profile photo; 
+    console.log('user new profile :', profile); 
     return true;
   }
   

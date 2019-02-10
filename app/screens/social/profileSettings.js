@@ -17,7 +17,7 @@ import {
 
 import { FontAwesome } from "../../assets/icons";
 
-import { ImagePicker } from "expo";
+import { ImagePicker, Permissions } from "expo";
 
 export class ProfileSettings extends React.Component {
   static navigationOptions = {
@@ -36,7 +36,7 @@ export class ProfileSettings extends React.Component {
       secondPhone: user.secondPhone,
       password: user.password,
       newPassword: user.newPassword,
-      confirmPassword: user.confirmPassword,
+      confirmPassword: user.confirmPassword
     };
   }
 
@@ -73,13 +73,16 @@ export class ProfileSettings extends React.Component {
   };
 
   onChangePhotoClicked = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      return;
+    }
+
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
-      aspect: [4, 3]
-    });
-
-    console.log(this.state.userPhoto); 
-    console.log(result); 
+      base64: true,
+      aspect: [4, 3],
+    }); 
 
     if (!result.cancelled) {
       this.setState({ userPhoto: result.uri });
@@ -92,7 +95,7 @@ export class ProfileSettings extends React.Component {
         <View style={styles.header}>
           <Avatar img={this.state.userPhoto} rkType="big" />
           <CameraButton
-            navigation={this.props.navigation}
+            // navigation={this.props.navigation}
             onPress={this.onChangePhotoClicked}
             photos={[]}
           />

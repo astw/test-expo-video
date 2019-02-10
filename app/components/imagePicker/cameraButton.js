@@ -1,36 +1,22 @@
 import React from "react";
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  ActivityIndicator,
-  View,
-  Text,
-  ToastAndroid,
-  CameraRoll,
-  PermissionsAndroid
-} from "react-native";
+import { TouchableOpacity, StyleSheet, View } from "react-native";
 
-
-import {
-  RkText,
-  RkButton, 
-} from "react-native-ui-kitten";
+import { RkText, RkButton } from "react-native-ui-kitten";
 
 import { FontAwesome } from "../../assets/icons";
 
-export const CameraButton = (props) => {
-  navigate = () => {
-    props.navigation.navigate("PhotoViewer");
-  };
- 
+export const CameraButton = props => {
+  //   navigate = () => {
+  //     props.navigation.navigate("PhotoViewer");
+  //   };
+
   return (
     <TouchableOpacity style={[styles.cameraBtn]}>
       <View>
         <RkButton
           rkType="clear"
           style={styles.buttonSection}
-          onPress={props.onPress } 
+          onPress={props.onPress}
         >
           <RkText rkType="awesome hintColor" style={styles.cameraIconBtn}>
             {FontAwesome.camera}

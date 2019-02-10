@@ -39,10 +39,13 @@ export class PhotoViewer extends React.Component {
     });
   };
 
+  updateProfilePhoto = () =>{
+
+  }
+
   async componentDidMount() {
 
-    await this._pickImage();
-
+    await this._pickImage(); 
 
     // this.loadPhotos()
     //   .then(photos => {
@@ -53,7 +56,6 @@ export class PhotoViewer extends React.Component {
     //     console.log(err);
     //   });
   }
-
 
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
