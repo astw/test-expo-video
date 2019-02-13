@@ -15,6 +15,7 @@ export const FontIcons = {
 };
 
 export const FontAwesome = {
+  users: String.fromCharCode(61632),
   camera: String.fromCharCode(61488),
   videoCamera: String.fromCharCode(61501),
   letter: String.fromCharCode(61664),

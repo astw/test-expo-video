@@ -118,9 +118,11 @@ export class TeacherMeChat extends React.Component {
   );
 
   renderDate = (date) => (
-    <RkText style={styles.time} rkType='secondary7 hintColor'>
-      {moment().add(date, 'seconds').format('LT')}
-    </RkText>
+    <View>
+      <RkText style={styles.time} rkType='secondary7 hintColor'>
+        {moment().add(date, 'seconds').format('LT')}
+      </RkText>
+    </View>
   );
 
   renderItem = ({ item }) => {
@@ -131,18 +133,20 @@ export class TeacherMeChat extends React.Component {
     const itemStyle = isIncoming ? styles.itemIn : styles.itemOut;
  
     let avatorDiv 
-    if(isIncoming){
-      avatorDiv =  <Avatar style={styles.avatar} rkType='small' img={TeacherMeChat.OtherPerson.photo} />
+    if(isIncoming) {
+      avatorDiv = <Avatar style={styles.avatar} rkType='small' img= { TeacherMeChat.OtherPerson.photo } />
     } else {
-      avatorDiv =  <Avatar style={styles.avatar} rkType='small' img={TeacherMeChat.Me.photo} />
+      avatorDiv = <Avatar style={styles.avatarRight} rkType='small' img={TeacherMeChat.Me.photo} />
     }
     return (
       <View style={[styles.item, itemStyle]}> 
         {isIncoming && avatorDiv}
+        
         {!isIncoming && this.renderDate(item.time)}
         <View style={[styles.balloon, { backgroundColor }]}>
           <RkText rkType='primary2 mediumLine chat' style={{ paddingTop: 5 }}>{item.text}</RkText>
         </View>
+        
         {isIncoming && this.renderDate(item.time)}
         {!isIncoming && avatorDiv}
       </View>
@@ -187,6 +191,9 @@ const styles = RkStyleSheet.create(theme => ({
     alignItems: 'center',
   },
   avatar: {
+    marginRight: 16,
+  },
+  avatarRight: {
     marginRight: 16,
   },
   container: {
