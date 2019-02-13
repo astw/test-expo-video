@@ -218,9 +218,9 @@ class DataProvider {
   // get chat message by chat group Id
   //
    getChatsByChatGroupId = async(chatGroupId) =>{
-    let thisGroupChats = _.clone(chats); 
-    thisGroupChats = thisGroupChats.map(i=>{
-      
+    let thisGroupChats = JSON.parse(JSON.stringify(chats));  
+
+    thisGroupChats = thisGroupChats.map(i=>{ 
       let user = this.getUser(i.fromUser.userId);  
       i.fromUser = user
       return  i;

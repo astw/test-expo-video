@@ -53,8 +53,7 @@ export class GroupChat extends React.Component {
   constructor(props) {
     super(props);
 
-    const chatGroupName = this.props.navigation.getParam("chatGroupName", "");
-    console.log("chatGroupName", chatGroupName);
+    const chatGroupName = this.props.navigation.getParam("chatGroupName", ""); 
     this.state = {
       chatGroupName: chatGroupName,
       chats: []
@@ -66,7 +65,7 @@ export class GroupChat extends React.Component {
       "chatGroupId",
       undefined
     );
-    let chats = await data.getChatsByChatGroupId(chatGroupId);
+    let chats = await data.getChatsByChatGroupId(chatGroupId); 
 
     this.setState({ chats });
 
@@ -146,6 +145,7 @@ export class GroupChat extends React.Component {
   );
 
   renderItem = ({ item }) => {
+    console.log(item.fromUser.id, GroupChat.Me.id); 
     const isIncoming = item.fromUser.id !== GroupChat.Me.id;
     const backgroundColor = isIncoming
       ? RkTheme.current.colors.border.base
