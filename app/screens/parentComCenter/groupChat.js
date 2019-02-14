@@ -53,22 +53,27 @@ export class GroupChat extends React.Component {
   constructor(props) {
     super(props);
 
-    const chatGroupName = this.props.navigation.getParam("chatGroupName", ""); 
+    const chatGroupName = this.props.navigation.getParam("chatGroupName", "");
     this.state = {
       chatGroupName: chatGroupName,
       chats: []
     };
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     const chatGroupId = this.props.navigation.getParam(
       "chatGroupId",
       undefined
     );
-    let chats = await data.getChatsByChatGroupId(chatGroupId); 
+    try {
+      const chats = await data.getChatsByChatGroupId(chatGroupId);
+      this.setState({ chats });
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
-    this.setState({ chats });
-
+  componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.listRef.scrollToEnd();
     });
@@ -96,11 +101,12 @@ export class GroupChat extends React.Component {
     if (!this.state.message) {
       return;
     }
-    this.state.data.chats.push({
-      id: this.stat.chats.length,
+    this.state.chats.push({
+      id: this.state.chats.length,
       time: 0,
-      type: "out",
-      text: this.state.message
+      type: "text",
+      content: this.state.message,
+      fromUser : GroupChat.Me
     });
     this.setState({ message: "" });
     this.scrollToEnd(true);
@@ -145,7 +151,7 @@ export class GroupChat extends React.Component {
   );
 
   renderItem = ({ item }) => {
-    console.log(item.fromUser.id, GroupChat.Me.id); 
+    console.log(item.fromUser.id, GroupChat.Me.id);
     const isIncoming = item.fromUser.id !== GroupChat.Me.id;
     const backgroundColor = isIncoming
       ? RkTheme.current.colors.border.base
@@ -156,7 +162,7 @@ export class GroupChat extends React.Component {
     let avatorDiv;
     if (isIncoming) {
       avatorDiv = (
-        <View style={[styles.userContainer, styles.itemIn] }>
+        <View style={[styles.userContainer, styles.itemIn]}>
           <Avatar
             style={styles.avatar}
             rkType="small"
@@ -164,16 +170,19 @@ export class GroupChat extends React.Component {
           />
           <View style={styles.content}>
             <View style={styles.contentHeader}>
-              <RkText rkType="header6" style={styles.itemIn}>{item.fromUser.firstName}</RkText>
-              {this.renderDate(item.time, styles.timeIn)}
+              <RkText rkType="header6" style={styles.itemIn}>
+                {item.fromUser.firstName}
+              </RkText>
+              {/* {this.renderDate(item.time, styles.timeIn)} */}
             </View>
             <View style={[styles.balloon, { backgroundColor }]}>
               <RkText
                 rkType="primary2 mediumLine chat"
                 style={{ paddingTop: 1}}
               >
-                {item.content}
-              </RkText>
+                {item.content} 
+              </RkText>  
+              {this.renderDate(item.time, styles.timeIn)}
             </View>
           </View>
         </View>
@@ -182,8 +191,7 @@ export class GroupChat extends React.Component {
       avatorDiv = (
         <View style={[styles.userContainer, styles.itemOut]}>
           <View style={styles.content}>
-            <View style={[styles.contentHeader, styles.itemOut]}> 
-            </View>
+            <View style={[styles.contentHeader, styles.itemOut]} />
             <View style={[styles.balloon, { backgroundColor }]}>
               <RkText
                 rkType="primary2 mediumLine chat"
@@ -191,6 +199,7 @@ export class GroupChat extends React.Component {
               >
                 {item.content}
               </RkText>
+              {this.renderDate(item.time, styles.timeIn)}
             </View>
           </View>
           <Avatar
@@ -198,23 +207,12 @@ export class GroupChat extends React.Component {
             rkType="small"
             img={item.fromUser.photo}
           />
-        </View> 
+        </View>
       );
     }
     return (
       <View style={[styles, itemStyle]}>
-        {avatorDiv}
-        {/* { {isIncoming && avatorDiv} } */}
-
-        {/* {!isIncoming && this.renderDate(item.time)}
-        {<View style={[styles.balloon, { backgroundColor }]}>
-          <RkText rkType="primary2 mediumLine chat" style={{ paddingTop: 5 }}>
-            {item.content}
-          </RkText>
-        </View>}
-
-        {isIncoming && this.renderDate(item.time)}
-        {!isIncoming && avatorDiv} } */}
+        {avatorDiv} 
       </View>
     );
   };
@@ -263,14 +261,15 @@ const styles = RkStyleSheet.create(theme => ({
     paddingBottom: 12,
     paddingTop: 7,
     flexDirection: "row",
-    borderColor: "red", 
+    borderColor: "red"
   },
- 
+
   header: {
     alignItems: "center"
   },
   avatar: {
-    marginRight: 10
+    marginRight: 5,
+    marginLeft: 5
   },
   avatarRight: {
     marginRight: 0
@@ -294,19 +293,19 @@ const styles = RkStyleSheet.create(theme => ({
     flexDirection: "row"
   },
   itemIn: {
-    alignItems:"flex-start",
-    marginLeft: 0,
+    alignItems: "flex-start",
+    marginLeft: 0
   },
   itemOut: {
     alignSelf: "flex-end",
-    marginRight: 5,
+    marginRight: 5
   },
   balloon: {
     maxWidth: scale(250),
     paddingHorizontal: 15,
     paddingTop: 10,
-    paddingBottom: 15, 
-    borderRadius: 10,
+    paddingBottom: 15,
+    borderRadius: 10
   },
   timeIn: {
     alignSelf: "flex-end",
@@ -314,7 +313,7 @@ const styles = RkStyleSheet.create(theme => ({
   },
   timeOut: {
     alignSelf: "flex-start",
-    margin: 10
+    margin: 20
   },
   plus: {
     paddingVertical: 10,
@@ -330,5 +329,5 @@ const styles = RkStyleSheet.create(theme => ({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 6
-  },
+  }
 }));

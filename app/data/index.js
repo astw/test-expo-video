@@ -4,7 +4,7 @@ import users from "./raw/users";
 import articles from "./raw/articles";
 import notifications from "./raw/notifications";
 import conversations from "./raw/conversations";
-import chats from './raw/groupChats'; 
+import chats from './raw/groupChatsData'; 
 
 import cards from "./raw/cards";
 import axisos from "axios";
@@ -215,8 +215,16 @@ class DataProvider {
     return chatGroup;
   }
 
-  // get chat message by chat group Id
-  //
+  sendAChatMessage = async (from, chatMessage) => {
+    // TODO: send the chatMessage to server 
+    //  
+    //  if the content is text,  send to server,  
+    //  if the content is picture or video, send also the picture/video to server 
+    //  
+    
+  }
+
+  // get chat message by chat group Id 
    getChatsByChatGroupId = async(chatGroupId) =>{
     let thisGroupChats = JSON.parse(JSON.stringify(chats));  
 

@@ -1,4 +1,4 @@
-export const GroupChats = [
+export const GroupChatsData = [
   {
     id: 0,
     type: "text",
@@ -56,4 +56,4 @@ export const GroupChats = [
   }
 ];
 
-export default GroupChats;
+export default GroupChatsData;

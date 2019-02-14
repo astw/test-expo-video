@@ -42,10 +42,7 @@ export class ParentComCenter extends React.Component {
 
   extractItemKey = item => `${item.id}`;
 
-  onItemPressed = item => {
-
-    console.log('pressed', item); 
-
+  onItemPressed = item => { 
     const navigationParams = { 
       chatGroupId: item.id,
       chatGroupName: item.groupName
@@ -127,14 +124,14 @@ const styles = RkStyleSheet.create(theme => ({
     alignItems: "center"
   },
   container: {
-    paddingLeft: 19,
-    paddingRight: 16,
+    paddingLeft: 10,
+    paddingRight: 10,
     paddingBottom: 12,
     paddingTop: 7,
     flexDirection: "row"
   },
   content: {
-    marginLeft: 16,
+    marginLeft: 10,
     flex: 1
   },
   contentHeader: {
