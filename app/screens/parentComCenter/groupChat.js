@@ -56,7 +56,8 @@ export class GroupChat extends React.Component {
     const chatGroupName = this.props.navigation.getParam("chatGroupName", "");
     this.state = {
       chatGroupName: chatGroupName,
-      chats: []
+      chats: [],
+      showPlusArea: false
     };
   }
 
@@ -106,7 +107,7 @@ export class GroupChat extends React.Component {
       time: 0,
       type: "text",
       content: this.state.message,
-      fromUser : GroupChat.Me
+      fromUser: GroupChat.Me
     });
     this.setState({ message: "" });
     this.scrollToEnd(true);
@@ -118,6 +119,12 @@ export class GroupChat extends React.Component {
 
   static onNavigationAvatarPressed = (navigation, user) => {
     navigation.navigate("ProfileV1", { id: user.id });
+  };
+
+  onPlusButtonClicked = () => {
+    this.setState({
+      showPlusArea:!this.state.showPlusArea
+    })
   };
 
   static renderNavigationTitle = (navigation, user) => (
@@ -150,6 +157,18 @@ export class GroupChat extends React.Component {
     </View>
   );
 
+  showPlusArea = () => {
+    return <View style={styles.searchContainer}>
+            <RkTextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              // onChange={this.onInputChanged} 
+              rkType="row"
+              placeholder="Search"
+            />
+          </View>;
+  }
+
   renderItem = ({ item }) => {
     console.log(item.fromUser.id, GroupChat.Me.id);
     const isIncoming = item.fromUser.id !== GroupChat.Me.id;
@@ -178,10 +197,10 @@ export class GroupChat extends React.Component {
             <View style={[styles.balloon, { backgroundColor }]}>
               <RkText
                 rkType="primary2 mediumLine chat"
-                style={{ paddingTop: 1}}
+                style={{ paddingTop: 1 }}
               >
-                {item.content} 
-              </RkText>  
+                {item.content}
+              </RkText>
               {this.renderDate(item.time, styles.timeIn)}
             </View>
           </View>
@@ -210,14 +229,18 @@ export class GroupChat extends React.Component {
         </View>
       );
     }
-    return (
-      <View style={[styles, itemStyle]}>
-        {avatorDiv} 
-      </View>
-    );
+    return <View style={[styles, itemStyle]}>{avatorDiv}</View>;
   };
 
-  render = () => (
+  render = () => {
+    let plusArea; 
+
+    if (this.state.showPlusArea)
+      plusArea =  this.showPlusArea();
+    else 
+      plusArea = null;
+
+    return (
     <RkAvoidKeyboard
       style={styles.container}
       onResponderRelease={Keyboard.dismiss}
@@ -230,31 +253,47 @@ export class GroupChat extends React.Component {
         keyExtractor={this.extractItemKey}
         renderItem={this.renderItem}
       />
+      {plusArea}
       <View style={styles.footer}>
-        <RkButton style={styles.plus} rkType="clear">
+        <RkButton
+          style={styles.plus}
+          rkType="clear"
+          onClick={this.onPlusButtonClicked}
+        >
           <RkText rkType="awesome secondaryColor">{FontAwesome.plus}</RkText>
         </RkButton>
         <RkTextInput
           onFocus={this.scrollToEnd}
           onBlur={this.scrollToEnd}
           onChangeText={this.onInputChanged}
+          multiline={true}
           value={this.state.message}
-          rkType="row sticker"
+          rkType="info row small"
+          // row sticker
           placeholder="Add a comment..."
         />
         <RkButton
           onPress={this.onSendButtonPressed}
           style={styles.send}
-          rkType="circle highlight"
+          rkType="small info highlight"
         >
           <Image source={require("../../assets/icons/sendIcon.png")} />
         </RkButton>
       </View>
     </RkAvoidKeyboard>
   );
+  }
 }
 
 const styles = RkStyleSheet.create(theme => ({
+  searchContainer: {
+    backgroundColor: theme.colors.screen.bold,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    height: 60,
+    alignItems: "center"
+  },
+  
   userContainer: {
     paddingLeft: 0,
     paddingRight: 0,
