@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  TextInput,
   FlatList,
   View,
   Platform,
@@ -17,6 +18,10 @@ import {
   RkTheme
 } from "react-native-ui-kitten";
 import _ from "lodash";
+import Emoticons from "react-native-emoticons";
+
+import * as emoticons from "react-native-emoticons";
+
 import { FontAwesome } from "../../assets/icons";
 import { data } from "../../data";
 import { Avatar } from "../../components/avatar";
@@ -24,7 +29,23 @@ import { scale } from "../../utils/scale";
 
 import NavigationType from "../../config/navigation/propTypes";
 
-const moment = require("moment");
+const moment = require("moment"); 
+
+RkTheme.setType('RkTextInput', 'small', {
+  input: {
+    backgroundColor: 'white',
+    marginLeft: 0,
+    marginHorizontal: 0,
+    borderRadius: 8,
+    height:50
+  },
+  color: 'gray', 
+  borderRadius: 8,
+  container: {
+    paddingHorizontal: 10
+  }
+});
+
 
 export class GroupChat extends React.Component {
   static propTypes = {
@@ -57,40 +78,48 @@ export class GroupChat extends React.Component {
     this.state = {
       chatGroupName: chatGroupName,
       chats: [],
-      showPlusArea: false
+      message: "",
+      showPlusArea: false,
+      showEmoticons: false
     };
   }
 
-  async componentWillMount() {
+ componentDidMount() {
     const chatGroupId = this.props.navigation.getParam(
       "chatGroupId",
       undefined
     );
-    try {
-      const chats = await data.getChatsByChatGroupId(chatGroupId);
-      this.setState({ chats });
-    } catch (e) {
-      console.log(e);
-    }
-  }
+     
+      data.getChatsByChatGroupId(chatGroupId)
+      .then(chats=>{ 
+        this.setState({ chats });
+      })
+      .catch(e=>{
+       console.log(e);
+      });
 
-  componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.listRef.scrollToEnd();
     });
   }
-
-  setListRef = ref => {
+ 
+  setListRef = (ref) => {  
     this.listRef = ref;
   };
 
   extractItemKey = item => `${item.id}`;
 
   scrollToEnd = () => {
+ 
     if (Platform.OS === "ios") {
       this.listRef.scrollToEnd();
-    } else {
-      _.delay(this.listRef.scrollToEnd, 100);
+    } else { 
+      // below function does work in Android
+      //_.delay(this.listRef.scrollToEnd, 100)
+ 
+      setTimeout(()=>{
+        this.listRef.scrollToEnd()
+      }, 100);
     }
   };
 
@@ -102,6 +131,7 @@ export class GroupChat extends React.Component {
     if (!this.state.message) {
       return;
     }
+    // TODO call service to send to server
     this.state.chats.push({
       id: this.state.chats.length,
       time: 0,
@@ -109,8 +139,12 @@ export class GroupChat extends React.Component {
       content: this.state.message,
       fromUser: GroupChat.Me
     });
-    this.setState({ message: "" });
     this.scrollToEnd(true);
+
+    this.setState({
+      message:'',
+      showEmoticons: false,
+    });
   };
 
   static onNavigationTitlePressed = (navigation, user) => {
@@ -123,8 +157,28 @@ export class GroupChat extends React.Component {
 
   onPlusButtonClicked = () => {
     this.setState({
-      showPlusArea:!this.state.showPlusArea
-    })
+      showPlusArea: !this.state.showPlusArea,
+      showEmoticons: !this.state.showEmoticons
+    });
+  };
+
+  _onEmoticonPress = e => {
+    console.log(e);
+    this.setState({
+      message: `${this.state.message}${e.code}`
+    });
+  };
+
+  _onBackspacePress = e => {
+    let { message } = this.state;
+    if (!message) return;
+
+    message = emoticons.splitter(message).slice(0, -1);
+    this.setState({
+      showPlusArea: !this.state.showPlusArea,
+      showEmoticons: !this.state.showEmoticons,
+      message,
+    }); 
   };
 
   static renderNavigationTitle = (navigation, user) => (
@@ -157,20 +211,20 @@ export class GroupChat extends React.Component {
     </View>
   );
 
-  showPlusArea = () => {
-    return <View style={styles.searchContainer}>
-            <RkTextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              // onChange={this.onInputChanged} 
-              rkType="row"
-              placeholder="Search"
-            />
-          </View>;
-  }
+  showPlusArea = () => (
+    <View>
+      <Emoticons 
+        onEmoticonPress={this._onEmoticonPress.bind(this)}
+        onBackspacePress={this._onBackspacePress.bind(this)}
+        show={this.state.showEmoticons}
+        concise={true}
+        showHistoryBar={true}
+        showPlusBar={false}
+      />
+    </View>
+  );
 
   renderItem = ({ item }) => {
-    console.log(item.fromUser.id, GroupChat.Me.id);
     const isIncoming = item.fromUser.id !== GroupChat.Me.id;
     const backgroundColor = isIncoming
       ? RkTheme.current.colors.border.base
@@ -233,56 +287,70 @@ export class GroupChat extends React.Component {
   };
 
   render = () => {
-    let plusArea; 
+    let plusArea;
 
-    if (this.state.showPlusArea)
-      plusArea =  this.showPlusArea();
-    else 
-      plusArea = null;
+    if (this.state.showEmoticons) plusArea = this.showPlusArea();
+    else plusArea = null;
 
     return (
-    <RkAvoidKeyboard
-      style={styles.container}
-      onResponderRelease={Keyboard.dismiss}
-    >
-      <FlatList
-        ref={this.setListRef}
-        extraData={this.state}
-        style={styles.list}
-        data={this.state.chats}
-        keyExtractor={this.extractItemKey}
-        renderItem={this.renderItem}
-      />
-      {plusArea}
-      <View style={styles.footer}>
-        <RkButton
-          style={styles.plus}
-          rkType="clear"
-          onClick={this.onPlusButtonClicked}
-        >
-          <RkText rkType="awesome secondaryColor">{FontAwesome.plus}</RkText>
-        </RkButton>
-        <RkTextInput
-          onFocus={this.scrollToEnd}
-          onBlur={this.scrollToEnd}
-          onChangeText={this.onInputChanged}
-          multiline={true}
-          value={this.state.message}
-          rkType="info row small"
-          // row sticker
-          placeholder="Add a comment..."
+      <RkAvoidKeyboard
+        style={styles.container}
+        onResponderRelease={Keyboard.dismiss}
+      >
+        <FlatList
+          ref={this.setListRef}
+          extraData={this.state}
+          style={styles.list}
+          data={this.state.chats}
+          keyExtractor={this.extractItemKey}
+          renderItem={this.renderItem}
         />
-        <RkButton
-          onPress={this.onSendButtonPressed}
-          style={styles.send}
-          rkType="small info highlight"
-        >
-          <Image source={require("../../assets/icons/sendIcon.png")} />
-        </RkButton>
-      </View>
-    </RkAvoidKeyboard>
-  );
-  }
+
+        {plusArea}
+
+        <View style={styles.footer}>
+          <RkButton
+            style={styles.plus}
+            rkType="clear"
+            onPress={this.onPlusButtonClicked}
+          >
+            <RkText rkType="awesome secondaryColor">{FontAwesome.plus}</RkText>
+          </RkButton>
+          {/* <TextInput
+              style={ styles.textInput }
+              onChangeText={(text) => this.setState({message:text})}
+              value={this.state.message}
+              onFocus={this.scrollToEnd}
+              onBlur={this.scrollToEnd} 
+              underlineColorAndroid='transparent'
+              multiline = { true }
+            /> */}
+          <RkTextInput
+            onFocus={this.scrollToEnd}
+            onBlur={this.scrollToEnd}
+            onChangeText={this.onInputChanged}
+            underlineColorAndroid='transparent'
+            multiline={true}
+            spellCheck={false}
+            autoCorrect={false}
+
+            value={this.state.message}
+            rkType="info row small"
+            // row sticker
+            placeholder="Add a comment..."
+          />
+
+          <RkButton
+            onPress={this.onSendButtonPressed}
+            style={styles.send}
+            rkType="small info highlight"
+          >
+            <Image source={require("../../assets/icons/sendIcon.png")} />
+          </RkButton>
+        </View>
+      </RkAvoidKeyboard>
+    );
+  };
 }
 
 const styles = RkStyleSheet.create(theme => ({
@@ -293,7 +361,18 @@ const styles = RkStyleSheet.create(theme => ({
     height: 60,
     alignItems: "center"
   },
-  
+
+  textInput: {
+    flexGrow:1, 
+    height: 50, 
+    borderColor: 'gray', 
+    borderWidth: 1,
+    backgroundColor: theme.colors.screen.base,
+    borderRadius:5,
+    fontSize: 24,
+
+  }, 
+
   userContainer: {
     paddingLeft: 0,
     paddingRight: 0,
@@ -314,11 +393,13 @@ const styles = RkStyleSheet.create(theme => ({
     marginRight: 0
   },
   container: {
-    flex: 1,
+    flex: 1, 
+    flexDirection: "column",
     backgroundColor: theme.colors.screen.base
   },
   list: {
-    paddingHorizontal: 17
+    paddingHorizontal: 17,
+    flexGrow: 0
   },
   footer: {
     flexDirection: "row",
@@ -343,7 +424,7 @@ const styles = RkStyleSheet.create(theme => ({
     maxWidth: scale(250),
     paddingHorizontal: 15,
     paddingTop: 10,
-    paddingBottom: 15,
+    paddingBottom: 10,
     borderRadius: 10
   },
   timeIn: {
@@ -362,7 +443,8 @@ const styles = RkStyleSheet.create(theme => ({
   send: {
     width: 40,
     height: 40,
-    marginLeft: 10
+    marginLeft: 10,
+    alignSelf:'center'
   },
   contentHeader: {
     flexDirection: "row",
