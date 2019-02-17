@@ -15,6 +15,9 @@ export const FontIcons = {
 };
 
 export const FontAwesome = {
+  solidCircle: String.fromCharCode(61713),
+  stopCircle: String.fromCharCode(62093),
+  cross: String.fromCharCode(61527),
   users: String.fromCharCode(61632),
   camera: String.fromCharCode(61488),
   videoCamera: String.fromCharCode(61501),
@@ -30,6 +33,7 @@ export const FontAwesome = {
   plus: String.fromCharCode(61543),
   search: String.fromCharCode(61442),
   smile: String.fromCharCode(61720),
+  picture: String.fromCharCode(61502),
   chevronRight: String.fromCharCode(61524),
   chevronLeft: String.fromCharCode(61700),
   bars: String.fromCharCode(61641),

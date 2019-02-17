@@ -96,6 +96,7 @@ export class ProfileSettings extends React.Component {
           <Avatar img={this.state.userPhoto} rkType="big" />
           <CameraButton
             // navigation={this.props.navigation}
+            image={FontAwesome.picture}
             onPress={this.onChangePhotoClicked}
             photos={[]}
           />

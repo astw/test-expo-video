@@ -19,7 +19,7 @@ export const CameraButton = props => {
           onPress={props.onPress}
         >
           <RkText rkType="awesome hintColor" style={styles.cameraIconBtn}>
-            {FontAwesome.camera}
+            {props.image}
           </RkText>
         </RkButton>
       </View>

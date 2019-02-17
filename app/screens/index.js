@@ -12,4 +12,4 @@ export * from './theme';
 export * from './chatWithTeacher';
 export * from './teachersMessage';
 export * from './parentComCenter';
-
+export * from './video';

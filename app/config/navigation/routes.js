@@ -55,7 +55,9 @@ export const MainRoutes = [
         title: "",
         icon: FontIcons.navigation,
         screen: Screens.GroupChat,
-        children: []
+        children: [
+         
+        ]
       }
     ]
   },
@@ -86,7 +88,7 @@ export const MainRoutes = [
         children: []
       }
     ]
-  }
+  }, 
 ];
 
 const menuRoutes = _.cloneDeep(MainRoutes);
@@ -94,7 +96,15 @@ menuRoutes.unshift({
   id: "GridV2",
   title: "Start",
   screen: Screens.GridV2,
-  children: []
+  children: [
+    {
+      id: "VideoCapture",
+      title: "VideoCapture",
+      icon: FontIcons.PhotoViewer,
+      screen: Screens.VideoRecorder,
+      children: []
+    }
+  ]
 });
 
 export const MenuRoutes = menuRoutes;

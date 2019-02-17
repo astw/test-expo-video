@@ -7,7 +7,8 @@ import {
   Image,
   TouchableOpacity,
   Keyboard,
-  InteractionManager
+  InteractionManager,
+  Dimensions
 } from "react-native";
 import {
   RkButton,
@@ -22,30 +23,33 @@ import Emoticons from "react-native-emoticons";
 
 import * as emoticons from "react-native-emoticons";
 
+import { ImagePicker, Permissions } from "expo";
+
 import { FontAwesome } from "../../assets/icons";
 import { data } from "../../data";
 import { Avatar } from "../../components/avatar";
 import { scale } from "../../utils/scale";
-
+import { CameraButton } from "../../components";
 import NavigationType from "../../config/navigation/propTypes";
 
-const moment = require("moment"); 
+const moment = require("moment");
 
-RkTheme.setType('RkTextInput', 'small', {
+const {height, width} = Dimensions.get('window');
+
+RkTheme.setType("RkTextInput", "small", {
   input: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     marginLeft: 0,
     marginHorizontal: 0,
     borderRadius: 8,
-    height:50
+    height: 40
   },
-  color: 'gray', 
+  color: "gray",
   borderRadius: 8,
   container: {
-    paddingHorizontal: 10
+    paddingHorizontal: 5
   }
 });
-
 
 export class GroupChat extends React.Component {
   static propTypes = {
@@ -80,45 +84,47 @@ export class GroupChat extends React.Component {
       chats: [],
       message: "",
       showPlusArea: false,
-      showEmoticons: false
+      showEmoticons: false,
+      showCamera: false
     };
   }
 
- componentDidMount() {
+  componentDidMount() {
     const chatGroupId = this.props.navigation.getParam(
       "chatGroupId",
       undefined
     );
-     
-      data.getChatsByChatGroupId(chatGroupId)
-      .then(chats=>{ 
+
+    data
+      .getChatsByChatGroupId(chatGroupId)
+      .then(chats => {
         this.setState({ chats });
       })
-      .catch(e=>{
-       console.log(e);
+      .catch(e => {
+        console.log(e);
       });
 
     InteractionManager.runAfterInteractions(() => {
       this.listRef.scrollToEnd();
     });
   }
- 
-  setListRef = (ref) => {  
+
+  setListRef = ref => {
     this.listRef = ref;
   };
 
   extractItemKey = item => `${item.id}`;
 
-  scrollToEnd = () => {
- 
+  scrollToEnd = () => { 
+
     if (Platform.OS === "ios") {
       this.listRef.scrollToEnd();
-    } else { 
+    } else {
       // below function does work in Android
       //_.delay(this.listRef.scrollToEnd, 100)
- 
-      setTimeout(()=>{
-        this.listRef.scrollToEnd()
+
+      setTimeout(() => {
+        this.listRef.scrollToEnd();
       }, 100);
     }
   };
@@ -142,8 +148,8 @@ export class GroupChat extends React.Component {
     this.scrollToEnd(true);
 
     this.setState({
-      message:'',
-      showEmoticons: false,
+      message: "",
+      showEmoticons: false
     });
   };
 
@@ -177,8 +183,83 @@ export class GroupChat extends React.Component {
     this.setState({
       showPlusArea: !this.state.showPlusArea,
       showEmoticons: !this.state.showEmoticons,
-      message,
-    }); 
+      message
+    });
+  };
+
+  onVideoCaptureBack = ({mediaFile}) =>{
+    
+    if(!mediaFile) return;
+       // TODO call service to send to server
+       this.state.chats.push({
+        id: this.state.chats.length,
+        time: 0,
+        type: "text",
+        content: mediaFile ? mediaFile.uri: '',
+        fromUser: GroupChat.Me
+      });
+      this.scrollToEnd(true);
+  
+      this.setState({
+        message: "",
+        showEmoticons: false,
+        showCamera: false
+      });
+  };
+
+  onVideoCameraButtonPress = e => { 
+    console.log('onideoCameraButtonPress', this.props.navigation); 
+    debugger;
+    this.props.navigation.navigate('VideoCapture', { goBack: this.onVideoCaptureBack });
+  };
+
+  onPhotoButtonPress = async e => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== "granted") {
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      base64: true,
+      aspect: [4, 3]
+    });
+
+    if (!result.cancelled) {
+      this.setState({ userPhoto: result.uri });
+    }
+
+    this.setState({
+      showCamera: false,
+      showEmoticons: false,
+    });
+  };
+
+  onCameraButtonPress = async e => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    if (status !== "granted") {
+      return;
+    }
+
+    const options = {
+      allowsEditing: true,
+      aspect: [4, 3],
+    }; 
+    
+    let result = await ImagePicker.launchCameraAsync(options)({
+      allowsEditing: true,
+      base64: true,
+      aspect: [4, 3]
+    });
+
+    if (!result.cancelled) {
+      this.setState({ userPhoto: result.uri });
+    }
+
+    this.setState({
+      showCamera: false,
+      showEmoticons: false,
+    });
   };
 
   static renderNavigationTitle = (navigation, user) => (
@@ -213,7 +294,7 @@ export class GroupChat extends React.Component {
 
   showPlusArea = () => (
     <View>
-      <Emoticons 
+      <Emoticons
         onEmoticonPress={this._onEmoticonPress.bind(this)}
         onBackspacePress={this._onBackspacePress.bind(this)}
         show={this.state.showEmoticons}
@@ -223,6 +304,35 @@ export class GroupChat extends React.Component {
       />
     </View>
   );
+
+  showCamera = () => {
+    if (this.state.showCamera) {
+      return (
+        <View style={styles.footer}>
+          <CameraButton image={FontAwesome.picture} onPress={this.onPhotoButtonPress} photos={[]} />
+          <CameraButton image={FontAwesome.camera} onPress={this.onCameraButtonPress} photos={[]} /> 
+          <CameraButton image={FontAwesome.videoCamera} onPress={this.onCameraButtonPress} photos={[]} />
+         
+           <RkButton
+            style={styles.plus}
+            rkType="clear"
+            onPress={this.onCameraButtonPress}
+          >
+            <RkText rkType="awesome primary">{FontAwesome.camera}</RkText>
+          </RkButton>
+          <RkButton
+            style={styles.plus}
+            rkType="clear"
+            onPress={this.onVideoCameraButtonPress}
+          >
+            <RkText rkType="awesome primary" style={{ fontSize: 30 }}>
+              {FontAwesome.videoCamera}
+            </RkText>
+          </RkButton>
+        </View>
+      );
+    } else return null;
+  };
 
   renderItem = ({ item }) => {
     const isIncoming = item.fromUser.id !== GroupChat.Me.id;
@@ -283,7 +393,18 @@ export class GroupChat extends React.Component {
         </View>
       );
     }
-    return <View style={[styles, itemStyle]}>{avatorDiv}</View>;
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          this.setState({
+            showCamera: false,
+            showEmoticons: false
+          })
+        }
+      >
+        <View style={[styles, itemStyle]}>{avatorDiv}</View>
+      </TouchableOpacity>
+    );
   };
 
   render = () => {
@@ -296,26 +417,45 @@ export class GroupChat extends React.Component {
       <RkAvoidKeyboard
         style={styles.container}
         onResponderRelease={Keyboard.dismiss}
-      >
-        <FlatList
+      > 
+       <FlatList
           ref={this.setListRef}
           extraData={this.state}
           style={styles.list}
           data={this.state.chats}
           keyExtractor={this.extractItemKey}
           renderItem={this.renderItem}
-        />
-
+        /> 
         {plusArea}
-
+        {this.showCamera()}
         <View style={styles.footer}>
           <RkButton
             style={styles.plus}
             rkType="clear"
-            onPress={this.onPlusButtonClicked}
+            onPress={() =>
+              this.setState({
+                showCamera: !this.state.showCamera,
+                showEmoticons: false
+              })
+            }
           >
             <RkText rkType="awesome secondaryColor">{FontAwesome.plus}</RkText>
           </RkButton>
+          <RkButton
+            style={styles.plus}
+            rkType="clear"
+            onPress={() =>
+              this.setState({
+                showEmoticons: !this.state.showEmoticons,
+                showCamera: false
+              })
+            }
+          >
+            <RkText rkType="awesome secondaryColor" style={{ fontSize: 30 }}>
+              {FontAwesome.smile}
+            </RkText>
+          </RkButton>
+
           {/* <TextInput
               style={ styles.textInput }
               onChangeText={(text) => this.setState({message:text})}
@@ -329,11 +469,10 @@ export class GroupChat extends React.Component {
             onFocus={this.scrollToEnd}
             onBlur={this.scrollToEnd}
             onChangeText={this.onInputChanged}
-            underlineColorAndroid='transparent'
+            underlineColorAndroid="transparent"
             multiline={true}
             spellCheck={false}
             autoCorrect={false}
-
             value={this.state.message}
             rkType="info row small"
             // row sticker
@@ -363,15 +502,14 @@ const styles = RkStyleSheet.create(theme => ({
   },
 
   textInput: {
-    flexGrow:1, 
-    height: 50, 
-    borderColor: 'gray', 
+    flexGrow: 1,
+    height: 50,
+    borderColor: "gray",
     borderWidth: 1,
     backgroundColor: theme.colors.screen.base,
-    borderRadius:5,
-    fontSize: 24,
-
-  }, 
+    borderRadius: 5,
+    fontSize: 24
+  },
 
   userContainer: {
     paddingLeft: 0,
@@ -393,13 +531,20 @@ const styles = RkStyleSheet.create(theme => ({
     marginRight: 0
   },
   container: {
-    flex: 1, 
+    flex: 1,
     flexDirection: "column",
     backgroundColor: theme.colors.screen.base
   },
   list: {
     paddingHorizontal: 17,
     flexGrow: 0
+  },
+  videoArea: {
+    flexDirection: "row",
+    height: height,
+    width: width,
+    padding: 10,
+    backgroundColor: theme.colors.screen.alter
   },
   footer: {
     flexDirection: "row",
@@ -424,7 +569,7 @@ const styles = RkStyleSheet.create(theme => ({
     maxWidth: scale(250),
     paddingHorizontal: 15,
     paddingTop: 10,
-    paddingBottom: 10,
+    paddingBottom: 5,
     borderRadius: 10
   },
   timeIn: {
@@ -444,7 +589,7 @@ const styles = RkStyleSheet.create(theme => ({
     width: 40,
     height: 40,
     marginLeft: 10,
-    alignSelf:'center'
+    alignSelf: "center"
   },
   contentHeader: {
     flexDirection: "row",
