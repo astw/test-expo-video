@@ -15,6 +15,8 @@ export const FontIcons = {
 };
 
 export const FontAwesome = {
+  check: String.fromCharCode(61452),
+  undo: String.fromCharCode(61666),
   solidCircle: String.fromCharCode(61713),
   stopCircle: String.fromCharCode(62093),
   cross: String.fromCharCode(61527),

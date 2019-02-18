@@ -10,15 +10,12 @@ import {
   Image,
   WebView,
   Platform,
-  Button, 
-} from "react-native"; 
+  Button
+} from "react-native";
 
 import { Camera, Permissions } from "expo";
 
 const { height, width } = Dimensions.get("window");
-
-console.log(height, width);
-
 import { RkText, RkButton } from "react-native-ui-kitten";
 
 import { FontAwesome } from "../../assets/icons";
@@ -32,7 +29,7 @@ export class VideoRecorder extends React.Component {
   };
 
   constructor(props) {
-    super(props); 
+    super(props);
   }
 
   async componentDidMount() {
@@ -40,31 +37,27 @@ export class VideoRecorder extends React.Component {
     this.setState({ hasCameraPermission: status === "granted" });
   }
 
-  _onBackPress() {
-    this.props.goBack();
+  goBack(params) {
+    const { navigation } = this.props;
+    navigation.setParams(params);
+    navigation.goBack(null);
+    navigation.state.params.goBack(params);
   }
 
   onCancelBtnPress = () => {
-    console.log("cancel bttton is pressed");
-
     this.camera.stopRecording();
     this.setState({
       isRecording: false
-    }); 
+    });
 
-    const params = { mediaFile: this.state.mediaFile }; 
-    this.props.navigation.setParams(params); 
-    this.props.navigation.goBack(null);
-
-    this.props.navigation.state.params.goBack(params);
+    this.goBack(null);
   };
 
   onActionBtnPress = async () => {
     if (this.camera) {
       // let photo = await this.camera.takePictureAsync();
-
       const options = {
-        maxDuration: 10
+        maxDuration: 30
       };
 
       if (this.state.isRecording) {
@@ -74,13 +67,16 @@ export class VideoRecorder extends React.Component {
           isRecording: true
         });
 
-        let video = await this.camera.recordAsync(options);
-
-        this.setState({
-          isRecording: false,
-          mediaFile: video,
-        });
-        console.log(video);
+        try {
+          const video = await this.camera.recordAsync(options);
+          this.setState({
+            isRecording: false,
+            mediaFile: video
+          });
+          this.camera.resumePreview();
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
   };
@@ -92,6 +88,81 @@ export class VideoRecorder extends React.Component {
           ? Camera.Constants.Type.front
           : Camera.Constants.Type.back
     });
+  };
+
+  onUndoBtnPress = () => {
+    this.camera.stopRecording();
+    this.setState({
+      mediaFile: undefined
+    });
+  };
+
+  onSelectedBtnPress = () => {
+    const params = { mediaFile: this.state.mediaFile };
+    this.goBack(params);
+  };
+
+  renderToggleButton = () => {
+    return (
+      <View style={styles.toggleButtonBar}>
+        <RkButton
+          rkType="clear"
+          style={styles.cameraSwitchBtn}
+          onPress={this.onToggleButtonPress}
+        >
+          <Image
+            style={styles.cameraSwitchBtn}
+            source={require("../../assets/icons/camera-switch.png")}
+          />
+        </RkButton>
+      </View>
+    );
+  };
+
+  renderActionBar = () => {
+    if (this.state.mediaFile) {
+      //render after recorder bar
+      return (
+        <View style={styles.afterRecordBar}>
+          <RkButton
+            rkType="clear"
+            backgroundColor="white"
+            onPress={this.onUndoBtnPress}
+          >
+            <RkText rkType="awesome" style={[styles.afterRecordBtn]}>
+              {FontAwesome.undo}
+            </RkText>
+          </RkButton>
+          <RkButton rkType="clear" onPress={this.onSelectedBtnPress}>
+            <RkText rkType="awesome" style={[styles.afterRecordBtn]}>
+              {FontAwesome.check}
+            </RkText>
+          </RkButton>
+        </View>
+      );
+    } else {
+      //render before recorder bar
+      return (
+        <View style={styles.actionBar}>
+          <RkText
+            rkType="awesome hintColor"
+            style={styles.cancelBtn}
+            onPress={this.onCancelBtnPress}
+          >
+            {" "}
+            {FontAwesome.cross}{" "}
+          </RkText>
+
+          <RkButton rkType="clear" onPress={this.onActionBtnPress}>
+            <RkText rkType="awesome primary" style={styles.cameraIconBtn}>
+              {this.state.isRecording
+                ? FontAwesome.stopCircle
+                : FontAwesome.solidCircle}
+            </RkText>
+          </RkButton>
+        </View>
+      );
+    }
   };
 
   render() {
@@ -110,43 +181,9 @@ export class VideoRecorder extends React.Component {
             style={{ flex: 1 }}
             type={this.state.type}
           >
-            <View style={styles.toggleButtonBar}>
-              <RkButton
-                rkType="clear"
-                style={styles.cameraSwitchBtn}
-                onPress={this.onToggleButtonPress}
-              >
-                <Image
-                  style={styles.cameraSwitchBtn}
-                  source={require("../../assets/icons/camera-switch.png")}
-                />
-              </RkButton>
-            </View>
+            {this.renderToggleButton()}
 
-            <View style={styles.actionBar}>
-              <RkText
-                rkType="awesome hintColor"
-                style={styles.cancelBtn}
-                onPress={this.onCancelBtnPress}
-              >
-                {FontAwesome.cross}
-              </RkText>
-
-              {/* <RkButton rkType="clear" style={styles.cancelBtn} 
-                    onPress={this.onCancelBtnPress}>
-                <RkText rkType="awesome hintColor" style={styles.cancelBtn}>
-                  {FontAwesome.cross}
-                </RkText>
-              </RkButton> */}
-
-              <RkButton rkType="clear" onPress={this.onActionBtnPress}>
-                <RkText rkType="awesome primary" style={styles.cameraIconBtn}>
-                  {this.state.isRecording
-                    ? FontAwesome.stopCircle
-                    : FontAwesome.solidCircle}
-                </RkText>
-              </RkButton>
-            </View>
+            {this.renderActionBar()}
           </Camera>
         </View>
       );
@@ -176,6 +213,26 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     // marginLeft: 'auto',
     marginRight: 150
+  },
+
+  afterRecordBtn: {
+    fontSize: 60,
+    marginRight: 20,
+    color: "green",
+    margin: 10,
+    padding: 80
+  },
+
+  afterRecordBar: {
+    position: "absolute",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    bottom: 50,
+    width: width - 50,
+    height: 80,
+    margin: 25,
+    backgroundColor:'red'
   },
 
   actionBtn: {

@@ -187,7 +187,12 @@ export class GroupChat extends React.Component {
     });
   };
 
-  onVideoCaptureBack = ({mediaFile}) =>{
+  onVideoCaptureBack = (params) =>{
+    
+    if(!params || !params.mediaFile) {
+      return;
+    }
+    const mediaFile = params.mediaFile; 
     
     if(!mediaFile) return;
        // TODO call service to send to server
@@ -207,9 +212,7 @@ export class GroupChat extends React.Component {
       });
   };
 
-  onVideoCameraButtonPress = e => { 
-    console.log('onideoCameraButtonPress', this.props.navigation); 
-    debugger;
+  onVideoCameraButtonPress = e => {   
     this.props.navigation.navigate('VideoCapture', { goBack: this.onVideoCaptureBack });
   };
 
