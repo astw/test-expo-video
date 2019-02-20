@@ -34,7 +34,7 @@ import NavigationType from "../../config/navigation/propTypes";
 
 const moment = require("moment");
 
-const {height, width} = Dimensions.get('window');
+const { height, width } = Dimensions.get("window");
 
 RkTheme.setType("RkTextInput", "small", {
   input: {
@@ -115,8 +115,7 @@ export class GroupChat extends React.Component {
 
   extractItemKey = item => `${item.id}`;
 
-  scrollToEnd = () => { 
-
+  scrollToEnd = () => {
     if (Platform.OS === "ios") {
       this.listRef.scrollToEnd();
     } else {
@@ -125,7 +124,7 @@ export class GroupChat extends React.Component {
 
       setTimeout(() => {
         this.listRef.scrollToEnd();
-      }, 100);
+      }, 300);
     }
   };
 
@@ -187,33 +186,34 @@ export class GroupChat extends React.Component {
     });
   };
 
-  onVideoCaptureBack = (params) =>{
-    
-    if(!params || !params.mediaFile) {
+  onVideoCaptureBack = params => {
+    if (!params || !params.mediaFile) {
       return;
     }
-    const mediaFile = params.mediaFile; 
-    
-    if(!mediaFile) return;
-       // TODO call service to send to server
-       this.state.chats.push({
-        id: this.state.chats.length,
-        time: 0,
-        type: "text",
-        content: mediaFile ? mediaFile.uri: '',
-        fromUser: GroupChat.Me
-      });
-      this.scrollToEnd(true);
-  
-      this.setState({
-        message: "",
-        showEmoticons: false,
-        showCamera: false
-      });
+    const mediaFile = params.mediaFile;
+
+    if (!mediaFile) return;
+    // TODO call service to send to server
+    this.state.chats.push({
+      id: this.state.chats.length,
+      time: 0,
+      type: "text",
+      content: mediaFile ? mediaFile.uri : "",
+      fromUser: GroupChat.Me
+    });
+    this.scrollToEnd(true);
+
+    this.setState({
+      message: "",
+      showEmoticons: false,
+      showCamera: false
+    });
   };
 
-  onVideoCameraButtonPress = e => {   
-    this.props.navigation.navigate('VideoCapture', { goBack: this.onVideoCaptureBack });
+  onVideoCameraButtonPress = e => {
+    this.props.navigation.navigate("VideoCapture", {
+      goBack: this.onVideoCaptureBack
+    });
   };
 
   onPhotoButtonPress = async e => {
@@ -231,10 +231,11 @@ export class GroupChat extends React.Component {
     if (!result.cancelled) {
       this.setState({ userPhoto: result.uri });
     }
+    processPhoto();
 
     this.setState({
       showCamera: false,
-      showEmoticons: false,
+      showEmoticons: false
     });
   };
 
@@ -246,9 +247,9 @@ export class GroupChat extends React.Component {
 
     const options = {
       allowsEditing: true,
-      aspect: [4, 3],
-    }; 
-    
+      aspect: [4, 3]
+    };
+
     let result = await ImagePicker.launchCameraAsync(options)({
       allowsEditing: true,
       base64: true,
@@ -259,12 +260,18 @@ export class GroupChat extends React.Component {
       this.setState({ userPhoto: result.uri });
     }
 
+    processPhoto();
+
     this.setState({
       showCamera: false,
-      showEmoticons: false,
+      showEmoticons: false
     });
   };
 
+  processPhoto(){
+    //show photo img message 
+
+  }
   static renderNavigationTitle = (navigation, user) => (
     <TouchableOpacity
       onPress={() => GroupChat.onNavigationTitlePressed(navigation, user)}
@@ -295,43 +302,44 @@ export class GroupChat extends React.Component {
     </View>
   );
 
-  showPlusArea = () => (
-    <View>
-      <Emoticons
-        onEmoticonPress={this._onEmoticonPress.bind(this)}
-        onBackspacePress={this._onBackspacePress.bind(this)}
-        show={this.state.showEmoticons}
-        concise={true}
-        showHistoryBar={true}
-        showPlusBar={false}
-      />
-    </View>
-  );
+  showEmojiArea = () => {
+    if (!this.state.showEmoticons) {
+      return null;
+    }
+
+    return (
+      <View style={{ flex: 1 }}>
+        <Emoticons
+          onEmoticonPress={this._onEmoticonPress.bind(this)}
+          onBackspacePress={this._onBackspacePress.bind(this)}
+          show={this.state.showEmoticons}
+          concise={true}
+          showHistoryBar={true}
+          showPlusBar={false}
+        />
+      </View>
+    );
+  };
 
   showCamera = () => {
     if (this.state.showCamera) {
       return (
         <View style={styles.footer}>
-          <CameraButton image={FontAwesome.picture} onPress={this.onPhotoButtonPress} photos={[]} />
-          <CameraButton image={FontAwesome.camera} onPress={this.onCameraButtonPress} photos={[]} /> 
-          <CameraButton image={FontAwesome.videoCamera} onPress={this.onCameraButtonPress} photos={[]} />
-         
-           <RkButton
-            style={styles.plus}
-            rkType="clear"
+          <CameraButton
+            image={FontAwesome.picture}
+            onPress={this.onPhotoButtonPress}
+            photos={[]}
+          />
+          <CameraButton
+            image={FontAwesome.camera}
             onPress={this.onCameraButtonPress}
-          >
-            <RkText rkType="awesome primary">{FontAwesome.camera}</RkText>
-          </RkButton>
-          <RkButton
-            style={styles.plus}
-            rkType="clear"
+            photos={[]}
+          />
+          <CameraButton
+            image={FontAwesome.videoCamera}
             onPress={this.onVideoCameraButtonPress}
-          >
-            <RkText rkType="awesome primary" style={{ fontSize: 30 }}>
-              {FontAwesome.videoCamera}
-            </RkText>
-          </RkButton>
+            photos={[]}
+          /> 
         </View>
       );
     } else return null;
@@ -411,25 +419,20 @@ export class GroupChat extends React.Component {
   };
 
   render = () => {
-    let plusArea;
-
-    if (this.state.showEmoticons) plusArea = this.showPlusArea();
-    else plusArea = null;
-
     return (
       <RkAvoidKeyboard
         style={styles.container}
         onResponderRelease={Keyboard.dismiss}
-      > 
-       <FlatList
+      >
+        <FlatList
           ref={this.setListRef}
           extraData={this.state}
           style={styles.list}
           data={this.state.chats}
           keyExtractor={this.extractItemKey}
           renderItem={this.renderItem}
-        /> 
-        {plusArea}
+        />
+        {this.showEmojiArea()}
         {this.showCamera()}
         <View style={styles.footer}>
           <RkButton
@@ -540,7 +543,7 @@ const styles = RkStyleSheet.create(theme => ({
   },
   list: {
     paddingHorizontal: 17,
-    flexGrow: 0
+    flex: 1
   },
   videoArea: {
     flexDirection: "row",
